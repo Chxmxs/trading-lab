@@ -1,5 +1,5 @@
-﻿def test_llm_placeholder():
+﻿def test_llm_placeholder_replaced_with_real_impl():
     from companion.explorer.discovery import propose_new_strategy_via_llm
-    import pytest
-    with pytest.raises(NotImplementedError):
-        propose_new_strategy_via_llm(None, "")
+    cfg = {"llm_enabled": False}
+    result = propose_new_strategy_via_llm(cfg)
+    assert result is None

@@ -15,6 +15,7 @@ from typing import Callable, Optional, Dict, Any, Iterable, List, Tuple
 # =============================================================================
 from companion.explorer.common import StrategyCandidate, load_strategy_callable_from_module
 from companion.explorer.optuna_search import run_optuna_search
+from companion.patch_registry import apply_all_patches
 
 # =============================================================================
 # LLM compat imports (supports both new and old OpenAI SDKs)

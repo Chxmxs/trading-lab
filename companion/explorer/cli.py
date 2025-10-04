@@ -64,18 +64,26 @@ def load_data_sources(data_dirs: list) -> list:
             logging.warning(f"Data directory {d} not found; skipping.")
             continue
         for file_path in path.rglob("*"):
-            if file_path.suffix.lower() in {".csv", ".parquet"}:
+            if file_path.suffix.lower() in (".csv", ".parquet"):
                 try:
+                    # Load the DataFrame
                     if file_path.suffix.lower() == ".csv":
                         df = pd.read_csv(file_path)
                     else:
                         df = pd.read_parquet(file_path)
                     if len(df) == 0:
                         continue
+                    # Check for a timestamp or date column
+                    lower_cols = {col.lower() for col in df.columns}
+                    if not ("timestamp" in lower_cols or "date" in lower_cols):
+                        logging.warning(f"Skipping {file_path} due to missing timestamp/date column.")
+                        continue
+                    # Only append if the DataFrame has a valid time column
                     data_frames.append(df)
                 except Exception as exc:
                     logging.exception(f"Failed to load {file_path}: {exc}")
     return data_frames
+
 
 def run_explorer(args: argparse.Namespace) -> None:
     config = load_config(args.config)
