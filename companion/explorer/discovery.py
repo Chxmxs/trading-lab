@@ -6,18 +6,260 @@ import logging
 import os
 import random
 import sys
-from dataclasses import dataclass, field
+import time
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from dataclasses import dataclass
+from typing import Callable, Optional, Dict, Any
+
+# ---------------------------------------------------------------------
+# LLM compat imports (supports both new and old OpenAI SDKs)
+# ---------------------------------------------------------------------
+try:
+    # New SDK (>= 1.0)
+    from openai import OpenAI  # type: ignore
+    _USE_OPENAI_V1 = True
+except Exception:
+    _USE_OPENAI_V1 = False
+    try:
+        import openai  # old SDK
+    except Exception:
+        openai = None  # will error nicely at runtime
+# ---------------------------------------------------------------------
 
 logger = logging.getLogger(__name__)
 
+# ======================================================================================
+# Data structures
+# ======================================================================================
+
 @dataclass
 class StrategyCandidate:
+    # Core fields used throughout your project:
     name: str
     func: Callable
-    params: Dict[str, Any] = field(default_factory=dict)
+    params: Dict[str, Any]
     source: str = "manual"
+
+    # Optional metadata (added for LLM/tests compatibility):
+    module_file: Optional[str] = None   # e.g., "companion/strategies/breakout_strategy.py"
+    class_name: Optional[str] = None    # e.g., "BreakoutStrategy"
+
+
+# ======================================================================================
+# Utilities
+# ======================================================================================
+
+def _append_json_line(path: str, payload: dict) -> None:
+    """Append one JSON object per line. Never let logging break the pipeline."""
+    try:
+        import os, json
+        dirpath = os.path.dirname(path)
+        if dirpath:
+            os.makedirs(dirpath, exist_ok=True)
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(json.dumps(payload, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
+
+def _llm_chat(prompt: str, model: str, temperature: float = 0.2, max_tokens: int = 1200) -> str:
+    """
+    Return raw string content from ChatCompletion, supporting both new and old OpenAI SDKs.
+    Requires OPENAI_API_KEY to be set in the environment.
+    """
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise RuntimeError(
+            "OPENAI_API_KEY is not set. Use `setx OPENAI_API_KEY YOUR_KEY` in PowerShell, "
+            "then close and reopen the terminal."
+        )
+
+    if _USE_OPENAI_V1:
+        client = OpenAI(api_key=api_key)
+        resp = client.chat.completions.create(
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return resp.choices[0].message.content or ""
+    else:
+        if openai is None:
+            raise RuntimeError(
+                "openai library not available. Run `pip install openai` inside the 'tradebot' environment."
+            )
+        openai.api_key = api_key
+        resp = openai.ChatCompletion.create(
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return resp["choices"][0]["message"]["content"] or ""
+
+
+def _parse_llm_strategy_json(text: str) -> Dict[str, Any]:
+    """
+    Parse LLM JSON expecting keys: name, module_file, class_name, params (object).
+    Returns a plain dict with those fields (validated). Does not import yet.
+    """
+    try:
+        obj = json.loads(text)
+    except Exception as e:
+        raise ValueError(f"LLM did not return valid JSON. Raw text was:\n{text}") from e
+
+    for key in ["name", "module_file", "class_name", "params"]:
+        if key not in obj:
+            raise ValueError(f"Missing required key '{key}' in LLM JSON.")
+
+    if not isinstance(obj["params"], dict):
+        raise ValueError("`params` must be a JSON object (dict).")
+
+    # Normalize path slashes
+    obj["module_file"] = str(obj["module_file"]).strip().replace("\\", "/")
+    obj["name"] = str(obj["name"]).strip()
+    obj["class_name"] = str(obj["class_name"]).strip()
+
+    return obj
+
+
+def _load_strategy_callable_from_module(module_file: str, class_name: str) -> Callable:
+    """
+    Dynamically import a Python module by file path and adapt a Strategy class
+    into a callable with signature: func(df, run_config, **params).
+    The Strategy class must implement __init__(**params) and run(df, run_config).
+    """
+    path = Path(module_file)
+    if not path.is_file():
+        raise FileNotFoundError(f"Module file not found: {module_file}")
+
+    spec = importlib.util.spec_from_file_location(path.stem, str(path))
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load module spec from: {module_file}")
+
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[path.stem] = module
+    spec.loader.exec_module(module)  # type: ignore
+
+    if not hasattr(module, class_name):
+        raise AttributeError(f"Class '{class_name}' not found in {module_file}")
+
+    cls = getattr(module, class_name)
+
+    # Wrap into the explorer's expected callable
+    def strategy_callable(df, run_config, **params):
+        instance = cls(**params)
+        return instance.run(df, run_config)
+
+    return strategy_callable
+
+
+# ======================================================================================
+# LLM -> StrategyCandidate
+# ======================================================================================
+
+def propose_new_strategy_via_llm(config: dict) -> Optional[StrategyCandidate]:
+    """
+    LLM proposal that returns a StrategyCandidate matching the project-wide signature:
+        StrategyCandidate(name, func, params, source)
+    - No import/validation here.
+    - Provides a lazy adapter func that will import module/class at run time.
+    - Logging never breaks the flow.
+    """
+    if not (config or {}).get("llm_enabled"):
+        return None
+
+    llm_cfg = (config or {}).get("llm") or {}
+    model = llm_cfg.get("model", "gpt-4o-mini")
+    temperature = float(llm_cfg.get("temperature", 0.2))
+    max_tokens = int(llm_cfg.get("max_tokens", 1200))
+    logs_path = llm_cfg.get("logs_path", "companion/explorer/llm_logs.json")
+    try:
+        logs_path = str(logs_path)
+    except Exception:
+        logs_path = "companion/explorer/llm_logs.json"
+
+    prompt = (
+        "You are an assistant generating trading strategy specifications for a PyBroker-based research lab.\n"
+        "Return ONLY valid JSON that conforms to this schema:\n"
+        "{"
+        "\"name\": str, "
+        "\"module_file\": str, "
+        "\"class_name\": str, "
+        "\"params\": object"
+        "}\n"
+        "Rules:\n"
+        "1) module_file must be a relative path inside 'companion/strategies', e.g. 'companion/strategies/breakout_strategy.py'.\n"
+        "2) class_name should be an UpperCamelCase class in that file (it may be created later).\n"
+        "3) params must be a flat JSON object mapping param names to numbers/strings/bools.\n"
+        "4) Output pure JSON only (no code fences or explanations).\n"
+    )
+
+    # Call LLM (monkeypatched in tests)
+    try:
+        import time as _time
+        _t0 = int(_time.time())
+        llm_raw = _llm_chat(prompt, model=model, temperature=temperature, max_tokens=max_tokens)
+        _append_json_line(logs_path, {
+            "ts": _t0,
+            "event": "llm_response",
+            "model": model,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "prompt": prompt,
+            "response": llm_raw,
+        })
+    except Exception as e:
+        _append_json_line(logs_path, {"ts": int(_time.time()), "event": "llm_call_error", "error": str(e)})
+        return None
+
+    # Inline JSON parse -> {name, module_file, class_name, params}
+    try:
+        import json as _json
+        obj = _json.loads(llm_raw)
+
+        name = str(obj.get("name", "")).strip()
+        module_file = str(obj.get("module_file", "")).strip().replace("\\", "/")
+        class_name = str(obj.get("class_name", "")).strip()
+        params = obj.get("params", {})
+
+        if not name or not module_file or not class_name or not isinstance(params, dict):
+            raise ValueError("LLM JSON missing required fields or wrong types.")
+
+        # Build a lazy adapter that resolves module/class at runtime
+        def _lazy_class_adapter(df, run_config=None, **strategy_params):
+            import importlib.util, sys, pathlib
+            path = pathlib.Path(module_file)
+            if not path.exists():
+                raise FileNotFoundError("Strategy file not found: %s" % module_file)
+            spec = importlib.util.spec_from_file_location(path.stem, str(path))
+            mod = importlib.util.module_from_spec(spec)
+            sys.modules[path.stem] = mod
+            assert spec is not None and spec.loader is not None
+            spec.loader.exec_module(mod)
+            cls = getattr(mod, class_name)
+            obj = cls(**strategy_params)
+            return obj.run(df, run_config)
+
+        return StrategyCandidate(
+            name=name,
+            func=_lazy_class_adapter,
+            params=params,
+            source="llm",
+            module_file=module_file,
+            class_name=class_name,
+        )
+
+    except Exception as e:
+        _append_json_line(logs_path, {"ts": int(_time.time()), "event": "llm_parse_error", "error": str(e), "raw": llm_raw})
+        return None
+
+
+
+# ======================================================================================
+# Candidate generators (sweeps, mutations, manual script registration)
+# ======================================================================================
 
 def generate_parameter_sweep(
     base_strategy: Callable,
@@ -25,53 +267,69 @@ def generate_parameter_sweep(
     max_candidates: int,
     name_prefix: str = "sweep",
 ) -> List[StrategyCandidate]:
+    """
+    Create StrategyCandidates by sampling or enumerating a search space.
+    The base_strategy must be a callable: base_strategy(df, run_config, **params).
+    """
     keys = list(search_space.keys())
     values_list = [list(search_space[k]) for k in keys]
-    all_combinations: List[Tuple[Any, ...]] = []
+
+    # Compute total combinations to decide full grid vs random sampling.
     total_combinations = 1
     for vals in values_list:
-        total_combinations *= len(vals)
+        total_combinations *= max(1, len(vals))
+
+    combos: List[Tuple[Any, ...]] = []
     if total_combinations <= max_candidates:
         import itertools
-        for combo in itertools.product(*values_list):
-            all_combinations.append(combo)
+        combos = list(itertools.product(*values_list))
     else:
         for _ in range(max_candidates):
             combo = tuple(random.choice(values_list[i]) for i in range(len(keys)))
-            all_combinations.append(combo)
+            combos.append(combo)
+
     candidates: List[StrategyCandidate] = []
-    for idx, combo in enumerate(all_combinations):
+    for idx, combo in enumerate(combos):
         params = dict(zip(keys, combo))
+
         def strategy_wrapper(df, run_config, _params=params, _fn=base_strategy):
             return _fn(df, run_config, **_params)
+
         name = f"{name_prefix}_{idx}"
         candidates.append(StrategyCandidate(name=name, func=strategy_wrapper, params=params, source="sweep"))
     return candidates
+
 
 def mutate_strategy(
     strategy: StrategyCandidate,
     perturbation: Dict[str, Tuple[float, float]],
     max_mutations: int = 1,
 ) -> StrategyCandidate:
+    """
+    Multiply numeric params by random factors within provided (low, high) bounds.
+    """
     base_params = strategy.params.copy()
     mutated_params = base_params.copy()
     for _ in range(max_mutations):
-        for param, (low, high) in perturbation.items():
+        for param, (low, high) in (perturbation or {}).items():
             if param in mutated_params and isinstance(mutated_params[param], (int, float)):
                 factor = random.uniform(low, high)
                 mutated_params[param] = type(mutated_params[param])(mutated_params[param] * factor)
+
     def mutated_func(df, run_config, _params=mutated_params, _fn=strategy.func):
         return _fn(df, run_config, **_params)
+
     mutated_name = f"{strategy.name}_mut"
     return StrategyCandidate(name=mutated_name, func=mutated_func, params=mutated_params, source="mutation")
 
-def propose_new_strategy_via_llm(llm_client, prompt_template, tools=None, temperature=0.5):
-    """
-    Placeholder LLM integration. Replace with real implementation if needed.
-    """
-    raise NotImplementedError("LLM integration is not yet implemented.")
 
 def register_strategy_from_script(script_path: str) -> Optional[StrategyCandidate]:
+    """
+    Load a strategy from a Python file. Two supported conventions:
+    1) A top-level callable named `strategy(df, run_config, **params) -> dict`
+    2) A class with `run(df, run_config)` and `__init__(**params)` named `Strategy` (or any name) plus
+       a top-level variable `DEFAULT_CLASS_NAME = "YourClassName"`, or we autodetect a single class if clear.
+    """
     path = Path(script_path)
     if not path.is_file():
         logger.error("Strategy script %s does not exist.", script_path)
@@ -83,12 +341,142 @@ def register_strategy_from_script(script_path: str) -> Optional[StrategyCandidat
         module = importlib.util.module_from_spec(spec)
         sys.modules[path.stem] = module
         spec.loader.exec_module(module)  # type: ignore
+
+        # Option A: simple function named 'strategy'
         strategy_func = getattr(module, "strategy", None)
-        if not callable(strategy_func):
-            logger.error("No callable 'strategy' found in %s", script_path)
-            return None
-        candidate_name = path.stem
-        return StrategyCandidate(name=candidate_name, func=strategy_func, params={}, source="manual")
+        if callable(strategy_func):
+            candidate_name = path.stem
+            return StrategyCandidate(name=candidate_name, func=strategy_func, params={}, source="manual")
+
+        # Option B: try a class
+        class_name = getattr(module, "DEFAULT_CLASS_NAME", None)
+        if class_name and hasattr(module, class_name):
+            cls = getattr(module, class_name)
+
+            def adapter(df, run_config, **params):
+                inst = cls(**params)
+                return inst.run(df, run_config)
+
+            return StrategyCandidate(name=path.stem, func=adapter, params={}, source="manual")
+
+        # Option C: autodetect single class with 'run'
+        classes = [getattr(module, k) for k in dir(module) if isinstance(getattr(module, k), type)]
+        runnable = [c for c in classes if hasattr(c, "run")]
+        if len(runnable) == 1:
+            cls = runnable[0]
+
+            def adapter2(df, run_config, **params):
+                inst = cls(**params)
+                return inst.run(df, run_config)
+
+            return StrategyCandidate(name=f"{path.stem}:{cls.__name__}", func=adapter2, params={}, source="manual")
+
+        logger.error("No callable 'strategy' or identifiable Strategy class found in %s", script_path)
+        return None
+
     except Exception as exc:
         logger.exception("Failed to register strategy from %s: %s", script_path, exc)
         return None
+
+
+# ======================================================================================
+# Orchestrated discovery
+# ======================================================================================
+
+def discover_strategies(config: Dict[str, Any]) -> List[StrategyCandidate]:
+    """
+    Main entry: collect candidates from config-defined sources.
+    Expected config keys (optional):
+      - "manual_scripts": [ "companion/strategies/breakout_strategy.py", ... ]
+      - "sweeps": [
+            {
+              "name": "breakout_sweep",
+              "base_module_file": "companion/strategies/breakout_strategy.py",
+              "base_class_name": "BreakoutStrategy",
+              "search_space": {"lookback":[20,50,100], "threshold":[1.1,1.2]},
+              "max_candidates": 20
+            }
+        ]
+      - "mutations": [
+            {
+              "target": "breakout_sweep_0",
+              "perturbation": {"lookback":[0.9,1.1], "threshold":[0.95,1.05]},
+              "max_mutations": 1
+            }
+        ]
+      - "llm_enabled": true/false
+      - "llm": { "model": "...", "temperature": 0.2, "max_tokens": 1200, "logs_path": "..." }
+    """
+    rng_seed = int((config or {}).get("seed", 777))
+    random.seed(rng_seed)
+
+    candidates: List[StrategyCandidate] = []
+
+    # 1) Manual scripts
+    for script in (config or {}).get("manual_scripts", []) or []:
+        try:
+            cand = register_strategy_from_script(script)
+            if cand is not None:
+                candidates.append(cand)
+        except Exception:
+            logger.exception("Manual script registration failed for %s", script)
+
+    # 2) Sweeps
+    for sweep in (config or {}).get("sweeps", []) or []:
+        try:
+            base_module = sweep.get("base_module_file")
+            base_class = sweep.get("base_class_name")
+            search_space = sweep.get("search_space") or {}
+            max_candidates = int(sweep.get("max_candidates", 20))
+            name_prefix = sweep.get("name", "sweep")
+
+            if not base_module or not base_class:
+                logger.error("Sweep missing base_module_file or base_class_name: %s", sweep)
+                continue
+
+            base_callable = _load_strategy_callable_from_module(base_module, base_class)
+            sweep_cands = generate_parameter_sweep(
+                base_strategy=base_callable,
+                search_space=search_space,
+                max_candidates=max_candidates,
+                name_prefix=name_prefix,
+            )
+            candidates.extend(sweep_cands)
+        except Exception:
+            logger.exception("Sweep generation failed for: %s", sweep)
+
+    # 3) Mutations
+    #    Note: This expects target names to already be in 'candidates' (e.g., from a sweep)
+    name_index = {c.name: c for c in candidates}
+    for mut in (config or {}).get("mutations", []) or []:
+        try:
+            target_name = mut.get("target")
+            perturbation = mut.get("perturbation") or {}
+            max_mutations = int(mut.get("max_mutations", 1))
+            if target_name not in name_index:
+                logger.error("Mutation target '%s' not found in current candidates.", target_name)
+                continue
+            mutated = mutate_strategy(name_index[target_name], perturbation, max_mutations=max_mutations)
+            candidates.append(mutated)
+        except Exception:
+            logger.exception("Mutation failed for: %s", mut)
+
+    # 4) LLM proposal (optional)
+    try:
+        if (config or {}).get("llm_enabled"):
+            llm_cand = propose_new_strategy_via_llm(config)
+            if llm_cand is not None:
+                candidates.append(llm_cand)
+    except Exception:
+        logger.exception("LLM proposal step failed unexpectedly.")
+
+    # Dedup by name (keep first occurrence)
+    seen = set()
+    unique: List[StrategyCandidate] = []
+    for c in candidates:
+        if c.name in seen:
+            continue
+        seen.add(c.name)
+        unique.append(c)
+
+    return unique
