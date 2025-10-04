@@ -26,20 +26,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # Core test deps your suite uses
+          # core test deps
           pip install pytest mlflow optuna openai pandas pyarrow
-          # Try to install pybroker; if unavailable on runner, create a stub
+          # try pybroker; if not available on the runner, create a stub so imports succeed
           if ! pip install pybroker; then
             echo "pybroker wheel not found for this runner. Using CI stub."
-            python - <<'PY'
-import pathlib
-root = pathlib.Path("ci_vendor/pybroker")
-root.mkdir(parents=True, exist_ok=True)
-# minimal stub to satisfy "import pybroker"
-(root / "__init__.py").write_text(
-    "# CI stub for pybroker (imports only). Real package is used locally.\n"
-)
-PY
+            mkdir -p ci_vendor/pybroker
+            printf "# CI stub for pybroker (imports only). Real package is used locally.\n" > ci_vendor/pybroker/__init__.py
             echo "PYTHONPATH=$PWD/ci_vendor:$PYTHONPATH" >> $GITHUB_ENV
           fi
 
@@ -57,7 +50,7 @@ PY
         run: |
           mkdir -p artifacts/_ci
           pytest -vv --durations=25 --maxfail=1 || echo "PYTEST_FAILED=1" >> $GITHUB_ENV
-          # Collect helpful artifacts
+          # collect helpful artifacts
           if [ -d artifacts/_quarantine ]; then cp -r artifacts/_quarantine artifacts/_ci/_quarantine; fi
           if [ -f companion/explorer/llm_logs.json ]; then cp companion/explorer/llm_logs.json artifacts/_ci/; fi
           if [ -d logs ]; then cp -r logs artifacts/_ci/logs; fi
@@ -74,6 +67,7 @@ PY
 
       - name: Fail if pytest failed
         if: env.PYTEST_FAILED == '1'
+        shell: bash
         run: |
           echo "::error::Pytest reported failures. See the 'ci-artifacts' artifact for logs/quarantine."
           exit 1
