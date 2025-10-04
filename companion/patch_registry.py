@@ -1,28 +1,34 @@
-﻿\"\"\"
-Central registry for self-healing patch handlers.
-Add new patches here so the system can discover and execute them.
-\"\"\"
+﻿"""
+patch_registry.py
+-----------------
+Keeps track of available auto-patch functions.
+Each patcher must define patch(df) -> df
+"""
 
-from companion.patchers.example_patch import example_patch
-# If your code_patcher.py defines a function called patch_code, import it here
-try:
-    from companion.patchers.code_patcher import patch_code
-except ImportError:
-    patch_code = None
+import importlib
+import logging
 
-# If your config_patcher.py defines a function called patch_config, import it here
-try:
-    from companion.patchers.config_patcher import patch_config
-except ImportError:
-    patch_config = None
+logger = logging.getLogger(__name__)
 
-# Collect available handlers in a list
-PATCH_HANDLERS = []
+# List of patcher module paths (relative imports)
+PATCH_MODULES = [
+    "companion.patchers.timestamp_patch"
+]
 
-# Add handlers if they are defined
-if example_patch:
-    PATCH_HANDLERS.append(example_patch)
-if patch_code:
-    PATCH_HANDLERS.append(patch_code)
-if patch_config:
-    PATCH_HANDLERS.append(patch_config)
+def apply_all_patches(df):
+    """
+    Sequentially apply all patchers in PATCH_MODULES.
+    Returns the patched DataFrame.
+    """
+    patched_df = df
+    for modname in PATCH_MODULES:
+        try:
+            mod = importlib.import_module(modname)
+            if hasattr(mod, "patch"):
+                patched_df = mod.patch(patched_df)
+                logger.info("Applied patcher: %s", modname)
+            else:
+                logger.warning("No 'patch' function in %s", modname)
+        except Exception as e:
+            logger.exception("Failed applying patch %s: %s", modname, e)
+    return patched_df
