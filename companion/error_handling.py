@@ -1,4 +1,4 @@
-"""
+﻿"""
 error_handling.py
 -----------------
 Centralized error capture, logging, and quarantine system.
