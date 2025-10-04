@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import importlib.util
 import json
@@ -8,12 +8,17 @@ import random
 import sys
 import time
 from pathlib import Path
-from dataclasses import dataclass
-from typing import Callable, Optional, Dict, Any
+from typing import Callable, Optional, Dict, Any, Iterable, List, Tuple
 
-# ---------------------------------------------------------------------
+# =============================================================================
+# Local imports (no circular deps)
+# =============================================================================
+from companion.explorer.common import StrategyCandidate, load_strategy_callable_from_module
+from companion.explorer.optuna_search import run_optuna_search
+
+# =============================================================================
 # LLM compat imports (supports both new and old OpenAI SDKs)
-# ---------------------------------------------------------------------
+# =============================================================================
 try:
     # New SDK (>= 1.0)
     from openai import OpenAI  # type: ignore
@@ -24,25 +29,19 @@ except Exception:
         import openai  # old SDK
     except Exception:
         openai = None  # will error nicely at runtime
-# ---------------------------------------------------------------------
 
+# -----------------------------------------------------------------------------
+# Logger setup
+# -----------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
 
-# ======================================================================================
-# Data structures
-# ======================================================================================
-
-@dataclass
-class StrategyCandidate:
-    # Core fields used throughout your project:
-    name: str
-    func: Callable
-    params: Dict[str, Any]
-    source: str = "manual"
-
-    # Optional metadata (added for LLM/tests compatibility):
-    module_file: Optional[str] = None   # e.g., "companion/strategies/breakout_strategy.py"
-    class_name: Optional[str] = None    # e.g., "BreakoutStrategy"
+# =============================================================================
+# Notes:
+# - StrategyCandidate and load_strategy_callable_from_module now come from
+#   companion.explorer.common to avoid circular imports.
+# - Optuna search integration imported safely from optuna_search.py.
+# - LLM helpers below are fully self-contained and do not depend on discovery.
+# =============================================================================
 
 
 # ======================================================================================
@@ -124,7 +123,7 @@ def _parse_llm_strategy_json(text: str) -> Dict[str, Any]:
     return obj
 
 
-def _load_strategy_callable_from_module(module_file: str, class_name: str) -> Callable:
+def load_strategy_callable_from_module(module_file: str, class_name: str) -> Callable:
     """
     Dynamically import a Python module by file path and adapt a Strategy class
     into a callable with signature: func(df, run_config, **params).
@@ -434,7 +433,7 @@ def discover_strategies(config: Dict[str, Any]) -> List[StrategyCandidate]:
                 logger.error("Sweep missing base_module_file or base_class_name: %s", sweep)
                 continue
 
-            base_callable = _load_strategy_callable_from_module(base_module, base_class)
+            base_callable = load_strategy_callable_from_module(base_module, base_class)
             sweep_cands = generate_parameter_sweep(
                 base_strategy=base_callable,
                 search_space=search_space,
@@ -469,6 +468,20 @@ def discover_strategies(config: Dict[str, Any]) -> List[StrategyCandidate]:
                 candidates.append(llm_cand)
     except Exception:
         logger.exception("LLM proposal step failed unexpectedly.")
+    # 4b) Optuna search (optional)
+    try:
+        if (config or {}).get("optuna_enabled"):
+            # Build a minimal data_context your evaluator expects.
+            # If your evaluator loads its own data from config, you can pass {} or None.
+            data_context = {
+                "data_dir": (config or {}).get("data_dir", ".\\data\\usable")
+            }
+            best_cand, best_metrics = run_optuna_search(config=config, data_context=data_context)
+            if best_cand is not None:
+                candidates.append(best_cand)
+                logger.info("Optuna best candidate %s | params=%s | best_metrics=%s", best_cand.name, best_cand.params, best_metrics)
+    except Exception:
+        logger.exception("Optuna search failed unexpectedly.")
 
     # Dedup by name (keep first occurrence)
     seen = set()
@@ -480,3 +493,4 @@ def discover_strategies(config: Dict[str, Any]) -> List[StrategyCandidate]:
         unique.append(c)
 
     return unique
+

@@ -1,1 +1,82 @@
-{"cv":{"n_splits":5,"embargo_pct":0.01,"purge_length":null},"base_strategies":[{"module":"companion.strategies.breakout_strategy","search_space":{"breakout_factor":[1,1.05,1.1],"lookback":[10,20,30]},"function":"strategy","max_candidates":3},{"module":"companion.strategies.breakout_strategy","search_space":{"breakout_factor":[1,1.05,1.1],"lookback":[10,20,30]},"function":"strategy","max_candidates":3}],"manual_strategies":[],"run_config":{},"llm_enabled":false,"llm_prompt":"","weights":{"sharpe":0.4,"mar":0.3,"cagr":0.2,"max_dd_penalty":0.1}}
+{
+  "cv": {
+    "n_splits": 5,
+    "embargo_pct": 0.01,
+    "purge_length": null
+  },
+
+  "base_strategies": [
+    {
+      "module": "companion.strategies.breakout_strategy",
+      "function": "strategy",
+      "search_space": {
+        "breakout_factor": [1, 1.05, 1.1],
+        "lookback": [10, 20, 30]
+      },
+      "max_candidates": 3
+    },
+    {
+      "module": "companion.strategies.breakout_strategy",
+      "function": "strategy",
+      "search_space": {
+        "breakout_factor": [1, 1.05, 1.1],
+        "lookback": [10, 20, 30]
+      },
+      "max_candidates": 3
+    }
+  ],
+
+  "manual_strategies": [],
+
+  "run_config": {
+    "data_dir": "data/usable",
+    "results_dir": "results/explorer",
+    "mlflow_uri": "file:./mlruns"
+  },
+
+  "weights": {
+    "sharpe": 0.4,
+    "mar": 0.3,
+    "cagr": 0.2,
+    "max_dd_penalty": 0.1
+  },
+
+  "llm_enabled": true,
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "temperature": 0.2,
+    "max_tokens": 1200,
+    "strategy_json_schema": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "module_file": { "type": "string" },
+        "class_name": { "type": "string" },
+        "params": { "type": "object" }
+      },
+      "required": ["name", "module_file", "class_name", "params"],
+      "additionalProperties": true
+    },
+    "logs_path": "companion/explorer/llm_logs.json"
+  },
+
+  "optuna_enabled": true,
+  "optuna": {
+    "study_name": "explorer_search",
+    "direction": "maximize",
+    "n_trials": 30,
+    "timeout_sec": 0,
+    "sampler": "tpe",
+    "pruner": "median",
+    "metric": "sharpe",
+    "candidate_template": {
+      "base_module_file": "companion/strategies/breakout_strategy.py",
+      "base_class_name": "BreakoutStrategy"
+    },
+    "search_space": {
+      "lookback": { "type": "int", "low": 10, "high": 200 },
+      "threshold": { "type": "float", "low": 1.02, "high": 1.50, "step": 0.01 }
+    }
+  }
+}
