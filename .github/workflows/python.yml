@@ -43,40 +43,35 @@ jobs:
           echo "PYTHONPATH=$GITHUB_WORKSPACE:$PYTHONPATH" >> $GITHUB_ENV
           python -c "import os,sys,platform; print('Python:', sys.version); print('Platform:', platform.platform()); print('OPENAI set:', bool(os.getenv('OPENAI_API_KEY')))"
 
-      # -------- Sanitize error_handling.py without heredocs ----------
+      # ---- Sanitize error_handling.py without heredocs (YAML-safe) ----
       - name: Sanitize source encodings (remove null bytes)
         shell: bash
         run: |
           mkdir -p scripts
-          cat > scripts/sanitize.py << 'EOF'
-import pathlib
-p = pathlib.Path("companion/error_handling.py")
-if p.exists():
-    b = p.read_bytes()
-    nulls = b.count(b"\x00")
-    print("error_handling.py null bytes BEFORE:", nulls)
-    if nulls:
-        try:
-            text = b.decode("utf-16")
-        except Exception:
-            text = b.decode("utf-8", "ignore").replace("\x00", "")
-        p.write_text(text, encoding="utf-8")
-        print("Sanitized error_handling.py to UTF-8")
-# purge pyc caches
-for d in pathlib.Path(".").rglob("__pycache__"):
-    for q in d.iterdir():
-        try:
-            q.unlink()
-        except Exception:
-            pass
-    try:
-        d.rmdir()
-    except Exception:
-        pass
-print("Sanitize step done.")
-EOF
+          printf "%s\n" \
+            "import pathlib" \
+            "p = pathlib.Path('companion/error_handling.py')" \
+            "if p.exists():" \
+            "    b = p.read_bytes()" \
+            "    nulls = b.count(b'\\x00')" \
+            "    print('error_handling.py null bytes BEFORE:', nulls)" \
+            "    if nulls:" \
+            "        try:" \
+            "            text = b.decode('utf-16')" \
+            "        except Exception:" \
+            "            text = b.decode('utf-8','ignore').replace('\\x00','')" \
+            "        p.write_text(text, encoding='utf-8')" \
+            "        print('Sanitized error_handling.py to UTF-8')" \
+            "for d in pathlib.Path('.').rglob('__pycache__'):" \
+            "    for q in d.iterdir():" \
+            "        try: q.unlink()" \
+            "        except Exception: pass" \
+            "    try: d.rmdir()" \
+            "    except Exception: pass" \
+            "print('Sanitize step done.')" \
+            > scripts/sanitize.py
           python scripts/sanitize.py
-      # ----------------------------------------------------------------
+      # -----------------------------------------------------------------
 
       - name: Run tests (verbose) and collect reports
         shell: bash
