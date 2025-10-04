@@ -26,13 +26,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # core test deps
+          # Core test deps
           pip install pytest mlflow optuna openai pandas pyarrow
-          # try pybroker; if not available on the runner, create a stub so imports succeed
+          # Try pybroker; if not available for this runner, create a tiny stub so imports succeed
           if ! pip install pybroker; then
             echo "pybroker wheel not found for this runner. Using CI stub."
             mkdir -p ci_vendor/pybroker
-            printf "# CI stub for pybroker (imports only). Real package is used locally.\n" > ci_vendor/pybroker/__init__.py
+            printf "%s\n" "# CI stub for pybroker (imports only). Real package is used locally." > ci_vendor/pybroker/__init__.py
             echo "PYTHONPATH=$PWD/ci_vendor:$PYTHONPATH" >> $GITHUB_ENV
           fi
 
@@ -42,18 +42,20 @@ jobs:
           OPENAI_API_KEY: sk-test-00000000000000000000000000000000
           PYTHONWARNINGS: ignore
         run: |
-          python -c "import sys,platform; print('Python', sys.version); print('Platform', platform.platform())"
+          python -c "import sys,platform; print('Python:', sys.version); print('Platform:', platform.platform())"
           pip freeze | sed -n '1,120p'
 
-      - name: Run tests
+      - name: Run tests (verbose) and collect reports
         shell: bash
         run: |
           mkdir -p artifacts/_ci
-          pytest -vv --durations=25 --maxfail=1 || echo "PYTEST_FAILED=1" >> $GITHUB_ENV
-          # collect helpful artifacts
+          pytest -vv -rA --durations=25 --maxfail=1 | tee artifacts/_ci/pytest-output.txt
+          status=${PIPESTATUS[0]}
+          # Collect helpful artifacts
           if [ -d artifacts/_quarantine ]; then cp -r artifacts/_quarantine artifacts/_ci/_quarantine; fi
           if [ -f companion/explorer/llm_logs.json ]; then cp companion/explorer/llm_logs.json artifacts/_ci/; fi
           if [ -d logs ]; then cp -r logs artifacts/_ci/logs; fi
+          exit $status
 
       - name: Upload CI artifacts (always)
         if: always()
@@ -64,10 +66,3 @@ jobs:
             artifacts/_ci
             .pytest_cache
             **/*.log
-
-      - name: Fail if pytest failed
-        if: env.PYTEST_FAILED == '1'
-        shell: bash
-        run: |
-          echo "::error::Pytest reported failures. See the 'ci-artifacts' artifact for logs/quarantine."
-          exit 1
