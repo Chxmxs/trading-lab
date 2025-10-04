@@ -31,13 +31,22 @@ def patch(df):
         logger.error("timestamp_patch: No timestamp column found.")
         return df
 
-    # 3. Convert to datetime and set as index
+    # 3. Convert to datetime and set as index (auto-detect epoch seconds)
     try:
-        df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True, errors="coerce")
+        ts = df["timestamp"]
+        # If it's integer-like and looks like Unix seconds, set unit='s'
+        unit = None
+        if pd.api.types.is_integer_dtype(ts) or pd.api.types.is_float_dtype(ts):
+            # crude check: 10-digit values in typical Unix seconds range
+            # avoid year 1970 from ns interpretation
+            if ts.dropna().astype(str).str.len().median() in (10, 13):
+                unit = "s" if ts.astype(str).str.len().median() == 10 else "ms"
+        df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True, errors="coerce", unit=unit)
         df = df.dropna(subset=["timestamp"])
         df = df.set_index("timestamp").sort_index()
-        logger.info("timestamp_patch: Successfully converted and set UTC index.")
+        logger.info("timestamp_patch: UTC index set (unit=%s).", unit or "auto")
     except Exception as e:
         logger.exception("timestamp_patch failed: %s", e)
+
 
     return df
