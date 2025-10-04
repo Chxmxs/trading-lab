@@ -1,0 +1,7 @@
+artifacts/
+mlruns/
+__pycache__/
+*.pyc
+companion/explorer/llm_logs.json
+results/
+data/usable/

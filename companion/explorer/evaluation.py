@@ -1,12 +1,57 @@
+"""
+evaluation.py
+-------------
+Cross-validation and metrics engine for Trading-Lab Explorer.
+Supports mlfinlab PurgedKFold, UTC auto-patching, retry/backoff, and MLflow logging.
+"""
+
+
 from __future__ import annotations
 
 import logging
 import math
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Tuple
+from companion.patch_registry import apply_all_patches
+from companion.error_handling import capture_errors, retry_with_backoff
+import json
 
 import numpy as np
 import pandas as pd
+
+# Optional MLflow support
+try:
+    import mlflow
+    _HAS_MLFLOW = True
+except Exception:
+    _HAS_MLFLOW = False
+
+
+# --- Auto-patching & normalization helper ---
+def _autopatch_and_normalize_df(df):
+    """
+    Applies all registered patches and enforces a UTC DatetimeIndex.
+    Returns the patched DataFrame. Never raises; logs internally.
+    """
+    try:
+        df = apply_all_patches(df)
+    except Exception:
+        import logging
+        logging.getLogger(__name__).exception("Auto-patching failed (ignored).")
+
+    # Enforce UTC DatetimeIndex if possible
+    try:
+        if hasattr(df, "index") and not isinstance(df.index, type(None)):
+            if df.index.tz is None:
+                df.index = df.index.tz_localize("UTC")
+            else:
+                df.index = df.index.tz_convert("UTC")
+    except Exception:
+        logging.getLogger(__name__).exception("Failed to enforce UTC index (ignored).")
+
+    return df
+# --------------------------------------------
+
 
 # --- BEGIN: mlfinlab PurgedKFold imports and flags (multi-path support) ---
 _HAS_MLFINLAB = False
@@ -181,6 +226,8 @@ def _purged_kfold_splits(data: pd.DataFrame, cv_config: CVConfig) -> Optional[Li
 # -----------------------------
 # Main CV evaluator
 # -----------------------------
+@capture_errors(run_name="evaluate_strategy_cv")
+@retry_with_backoff(max_retries=2, base_delay=3)
 def evaluate_strategy_cv(
     strategy_func: Callable[[pd.DataFrame, Dict[str, Any]], Dict[str, Any]],
     data: pd.DataFrame,
@@ -196,8 +243,8 @@ def evaluate_strategy_cv(
     strategy_func : Callable
         Function that takes (dataframe, run_config) and returns a dict:
             {
-                "equity": pd.Series,          # equity curve indexed by time
-                "trades": Optional[pd.DataFrame]  # optional trade ledger
+                "equity": pd.Series,               # equity curve indexed by time
+                "trades": Optional[pd.DataFrame]   # optional trade ledger
             }
         The evaluator uses ONLY the test fold results to compute metrics.
 
@@ -213,8 +260,15 @@ def evaluate_strategy_cv(
         Cross-validation configuration (n_splits, embargo_pct).
 
     timestamp_column : str
-        Column to interpret as timestamp if the index is not already a DatetimeIndex.
+        Column to interpret as timestamp if the index is not a DatetimeIndex.
     """
+    logger.info(
+        "Starting cross-validation for strategy_func=%s | n_splits=%d",
+        getattr(strategy_func, "__name__", str(strategy_func)),
+        getattr(cv_config, "n_splits", 5),
+    )
+
+
     # --- Ensure datetime index (UTC) ---
     if not isinstance(data.index, pd.DatetimeIndex):
         # Try provided column name or common alternatives
@@ -303,4 +357,22 @@ def evaluate_strategy_cv(
 
     # Optional: include n_folds actually used
     aggregated["folds"] = float(len(fold_metrics))
+
+    # --- Optional MLflow logging ---
+    if _HAS_MLFLOW:
+        try:
+            with mlflow.start_run(run_name=str(getattr(strategy_func, "__name__", "strategy"))):
+                for key, val in aggregated.items():
+                    if isinstance(val, (int, float)) and not math.isnan(val):
+                        mlflow.log_metric(key, float(val))
+                mlflow.log_params(run_config or {})
+                mlflow.log_text(json.dumps(aggregated, indent=2), "cv_metrics.json")
+        except Exception as e:
+            logger.warning("MLflow logging skipped: %s", e)
+    logger.info("Completed CV for %s | folds=%d | metrics=%s",
+                getattr(strategy_func, "__name__", str(strategy_func)),
+                int(aggregated.get("folds", 0)),
+                {k: round(v, 4) for k, v in aggregated.items()})
+
+
     return aggregated
