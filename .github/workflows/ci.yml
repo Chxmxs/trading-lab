@@ -1,0 +1,39 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 🔍 UTF-8 (no null bytes) validation using PowerShell
+      - name: Verify .py files have no null bytes
+        shell: pwsh
+        run: |
+          \ = @()
+          Get-ChildItem -Recurse -File -Filter *.py | ForEach-Object {
+            \42 46 99 115 118 32 102 105 108 116 101 114 61 108 102 115 32 100 105 102 102 61 108 102 115 32 109 101 114 103 101 61 108 102 115 32 45 116 101 120 116 13 10 42 46 112 97 114 113 117 101 116 32 102 105 108 116 101 114 61 108 102 115 32 100 105 102 102 61 108 102 115 32 109 101 114 103 101 61 108 102 115 32 45 116 101 120 116 13 10 42 32 116 101 120 116 61 97 117 116 111 13 10 42 32 116 101 120 116 61 97 117 116 111 13 10 = [System.IO.File]::ReadAllBytes(\.FullName)
+            if (\42 46 99 115 118 32 102 105 108 116 101 114 61 108 102 115 32 100 105 102 102 61 108 102 115 32 109 101 114 103 101 61 108 102 115 32 45 116 101 120 116 13 10 42 46 112 97 114 113 117 101 116 32 102 105 108 116 101 114 61 108 102 115 32 100 105 102 102 61 108 102 115 32 109 101 114 103 101 61 108 102 115 32 45 116 101 120 116 13 10 42 32 116 101 120 116 61 97 117 116 111 13 10 42 32 116 101 120 116 61 97 117 116 111 13 10 -contains 0) { \ += \.FullName }
+          }
+          if (\.Count -gt 0) {
+            Write-Host "Files with null bytes (likely UTF-16):"
+            \ | ForEach-Object { Write-Host " - " \ }
+            exit 1
+          } else {
+            Write-Host "OK: No null bytes in .py files."
+          }
+
+      - name: Run pytest
+        run: pytest -v
