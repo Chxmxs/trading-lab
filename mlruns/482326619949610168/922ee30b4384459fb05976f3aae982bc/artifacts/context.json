@@ -1,0 +1,32 @@
+{
+  "strategy": "SOPRRegimeBand",
+  "symbol": "BTCUSD",
+  "timeframe": "15m",
+  "params": {
+    "band_low": 0.9989468448256698,
+    "band_high": 1.0291354924280147,
+    "band_pad": 0.0010616955533913808,
+    "ma_short": 6,
+    "ma_regime": 70,
+    "tp_pct": 0.05912726728878613,
+    "sl_pct": 0.05574269294896714,
+    "sopr_tp_bull": 1.0515972509321059,
+    "sopr_tp_bear": 0.9374737484118826,
+    "regime_eps": 0.006118528947223795,
+    "max_hold_days": 50
+  },
+  "run_config": {
+    "start": "2013-10-01",
+    "end": "2025-03-23",
+    "oos_start": "2022-01-01",
+    "oos_end": "2024-12-31",
+    "fees_bps": 5,
+    "slippage_bps": 2,
+    "inputs": {
+      "price_csv": "data/cleaned/ohlcv_BTCUSD@15m.csv",
+      "sopr_csv": "data/metrics/metric_btc.adjusted_sopr_asopr@1d.csv"
+    }
+  },
+  "timestamp": "2025-10-03T12:31:11.647748+00:00",
+  "paramhash": "84641d57e0c9"
+}

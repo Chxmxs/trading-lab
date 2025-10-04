@@ -1,0 +1,3 @@
+2025-10-02 18:08:13,412Z INFO trading_lab.Strategy.DummyMLStrategy :: proposed_entries=1
+2025-10-02 18:08:13,412Z INFO trading_lab.Strategy.DummyMLStrategy :: filtered_entries=0
+2025-10-02 18:08:13,413Z INFO trading_lab.Strategy.DummyMLStrategy :: placed_orders=0

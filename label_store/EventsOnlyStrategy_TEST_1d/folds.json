@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "n_splits": 4,
+    "embargo": "2D",
+    "backend": "mlfinlab"
+  },
+  "folds": [
+    {
+      "train": [],
+      "test": [
+        0
+      ]
+    },
+    {
+      "train": [
+        0
+      ],
+      "test": [
+        1
+      ]
+    },
+    {
+      "train": [
+        0,
+        1
+      ],
+      "test": [
+        2
+      ]
+    },
+    {
+      "train": [
+        0,
+        1,
+        2
+      ],
+      "test": [
+        3
+      ]
+    }
+  ]
+}

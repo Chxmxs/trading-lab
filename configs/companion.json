@@ -1,0 +1,10 @@
+﻿{
+  "tracking_uri": "file:///C:/Users/Gladiator/trading-lab/mlruns",
+  "experiments": ["Default"],
+  "objective": "OOS_MAR",
+  "threshold": 0.1,
+  "min_trades_floor": 5,
+  "penalty_lambda_cap": 0.5,
+  "auto_apply": false,
+  "max_workers": 3
+}

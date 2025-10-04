@@ -1,0 +1,48 @@
+[TRIAL 37] final=-inf raw=-inf penalty=0.000000
+[CONSTRAINT] min_objective raw=-inf < -1.0
+
+--- RUN LOGS ---
+EXCEPTION:
+Traceback (most recent call last):
+  File "C:\Users\Gladiator\trading-lab\tuner\optuna_tuner.py", line 207, in _run_strategy
+    exec_mod = importlib.import_module("orchestrator.safety")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\importlib\__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1140, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'orchestrator.safety'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Gladiator\trading-lab\tuner\optuna_tuner.py", line 211, in _run_strategy
+    res = context["strategy_obj"].run(df, context["run_config"])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\strategies\SOPRRegimeBand.py", line 192, in run
+    sopr_d = _prepare_sopr(price_d.index, df, run_config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\strategies\SOPRRegimeBand.py", line 137, in _prepare_sopr
+    s = _load_sopr_from_csv(sopr_csv)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\strategies\SOPRRegimeBand.py", line 85, in _load_sopr_from_csv
+    df = pd.read_csv(path)
+         ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+             ^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/metrics/metric_btc.adjusted_sopr_asopr@1d.csv'

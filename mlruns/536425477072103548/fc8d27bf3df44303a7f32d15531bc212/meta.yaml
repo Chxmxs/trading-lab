@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/Gladiator/trading-lab/mlruns/536425477072103548/fc8d27bf3df44303a7f32d15531bc212/artifacts
+end_time: 1759429277627
+entry_point_name: ''
+experiment_id: '536425477072103548'
+lifecycle_stage: active
+run_id: fc8d27bf3df44303a7f32d15531bc212
+run_name: MyStrategy_TEST_1d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1759429277574
+status: 3
+tags: []
+user_id: Gladiator

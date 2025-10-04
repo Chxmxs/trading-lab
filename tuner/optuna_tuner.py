@@ -1,0 +1,525 @@
+﻿from __future__ import annotations
+
+import json, math, hashlib, traceback, importlib
+from copy import deepcopy
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, Tuple, Optional, List
+from datetime import datetime, timezone
+
+import numpy as np
+import pandas as pd
+
+# Optional MLflow
+try:
+    import mlflow
+except Exception:
+    mlflow = None
+
+# Optuna (required)
+import optuna
+
+
+# ---------- Utilities ----------
+
+def _to_utc(dt_like):
+    if pd.isna(dt_like):
+        return pd.NaT
+    ts = pd.to_datetime(dt_like, utc=True, errors="coerce")
+    return ts
+
+def _is_dt_index(idx) -> bool:
+    try:
+        # timezone-aware or datetime64 dtype
+        return (getattr(idx, "tz", None) is not None) or str(getattr(idx, "dtype", "")).startswith("datetime64")
+    except Exception:
+        return False
+
+def _parse_timeframe(tf: str) -> pd.Timedelta:
+    tf = str(tf).strip().lower()
+    if tf.endswith("ms"):
+        return pd.to_timedelta(int(tf[:-2]), unit="ms")
+    unit = tf[-1]
+    val = int(tf[:-1])
+    if unit == "s":
+        return pd.to_timedelta(val, unit="s")
+    if unit == "m":
+        return pd.to_timedelta(val, unit="m")
+    if unit == "h":
+        return pd.to_timedelta(val, unit="h")
+    if unit == "d":
+        return pd.to_timedelta(val, unit="d")
+    if unit == "w":
+        return pd.to_timedelta(val, unit="w")
+    raise ValueError(f"Unrecognized timeframe: {tf}")
+
+def _cagr(equity: pd.Series) -> float:
+    if equity is None or len(equity) < 2:
+        return 0.0
+    equity = equity.astype(float)
+    start_v = float(equity.iloc[0])
+    end_v   = float(equity.iloc[-1])
+    if start_v <= 0 or end_v <= 0:
+        return 0.0
+    dt_years = (equity.index[-1] - equity.index[0]).total_seconds() / (365.25 * 24 * 3600)
+    if dt_years <= 0:
+        return 0.0
+    return (end_v / start_v) ** (1.0 / dt_years) - 1.0
+
+def _max_drawdown(equity: pd.Series) -> float:
+    if equity is None or len(equity) < 2:
+        return 0.0
+    s = equity.astype(float)
+    roll_max = s.cummax()
+    dd = (roll_max - s) / roll_max.replace(0, np.nan)
+    dd = dd.replace([np.inf, -np.inf], np.nan).fillna(0.0)
+    return float(dd.max())
+
+def _mar(equity: pd.Series) -> float:
+    c = _cagr(equity)
+    mdd = _max_drawdown(equity)
+    if mdd <= 1e-9:
+        return c / 1e-9  # very large if c>0
+    return c / mdd
+
+def _filter_oos_trades(trades: pd.DataFrame, oos_start: pd.Timestamp, oos_end: pd.Timestamp) -> pd.DataFrame:
+    if trades is None or trades.empty:
+        return trades
+    df = trades.copy()
+    col_candidates = ["exit_time","exit","exit_ts","exit_dt","close_time","closed_at"]
+    for col in col_candidates:
+        if col in df.columns:
+            ts = pd.to_datetime(df[col], utc=True, errors="coerce")
+            return df.loc[(ts >= oos_start) & (ts <= oos_end)]
+    for col in ["entry_time","entry","entry_ts","entry_dt","open_time","opened_at"]:
+        if col in df.columns:
+            ts = pd.to_datetime(df[col], utc=True, errors="coerce")
+            return df.loc[(ts >= oos_start) & (ts <= oos_end)]
+    return df
+
+def _compute_objective(objective: str, equity_oos: pd.Series, trades_oos: pd.DataFrame) -> float:
+    objective = (objective or "").upper()
+    if objective == "ERPT":
+        if trades_oos is None or trades_oos.empty or "pnl_pct" not in trades_oos.columns:
+            return -np.inf
+        return float(np.nan_to_num(trades_oos["pnl_pct"].astype(float)).mean())
+    if equity_oos is None or len(equity_oos) < 3:
+        return -np.inf
+    return float(_mar(equity_oos))
+
+def _md5_short(d: Dict[str, Any]) -> str:
+    b = json.dumps(d, sort_keys=True, default=str).encode()
+    return hashlib.md5(b).hexdigest()[:12]
+
+def _suggest_from_json(space: Dict[str, Any], trial: optuna.trial.Trial) -> Dict[str, Any]:
+    params = {}
+    for name, spec in space.items():
+        typ = spec.get("type")
+        low = spec.get("low")
+        high = spec.get("high")
+        step = spec.get("step", None)
+        if typ == "float":
+            params[name] = trial.suggest_float(name, float(low), float(high))
+        elif typ == "int":
+            if step is not None:
+                params[name] = trial.suggest_int(name, int(low), int(high), step=int(step))
+            else:
+                params[name] = trial.suggest_int(name, int(low), int(high))
+        elif typ == "categorical":
+            params[name] = trial.suggest_categorical(name, spec.get("choices", []))
+        else:
+            raise ValueError(f"Unsupported type in space for {name}: {typ}")
+    return params
+
+def _perturb_params(base: Dict[str, Any], eps_pct: float, rng: np.random.Generator) -> Dict[str, Any]:
+    out = {}
+    for k, v in base.items():
+        if isinstance(v, (int, np.integer)):
+            delta = max(1, int(round(abs(v) * (eps_pct / 100.0))))
+            out[k] = int(v + rng.integers(-delta, delta + 1))
+        elif isinstance(v, (float, np.floating)):
+            factor = 1.0 + (eps_pct / 100.0) * (rng.random() * 2.0 - 1.0)
+            out[k] = float(v * factor)
+        else:
+            out[k] = v
+    return out
+
+
+# ---------- Tuner ----------
+
+@dataclass
+class TunerConfig:
+    strategy: str
+    symbol: str
+    timeframe: str
+    run_config: Dict[str, Any]
+    objective: str
+    constraints: Dict[str, Any]
+    robustness: Dict[str, Any]
+    optuna: Dict[str, Any]
+    mlflow: Dict[str, Any]
+
+class OptunaTuner:
+    def __init__(self, cfg: TunerConfig, study: optuna.Study):
+        self.cfg = cfg
+        self.study = study
+        self.timeframe_td = _parse_timeframe(cfg.timeframe)
+        self._rng = np.random.default_rng(42)
+
+    # ---- Strategy attachment ----
+    def _load_strategy_module(self):
+        name = self.cfg.strategy
+        try:
+            return importlib.import_module(f"strategies.{name}")
+        except Exception as e:
+            raise RuntimeError(f"Could not import strategy strategies.{name}: {e}")
+
+    def _build_context(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        now = datetime.now(timezone.utc).isoformat()
+        context = dict(
+            strategy=self.cfg.strategy,
+            symbol=self.cfg.symbol,
+            timeframe=self.cfg.timeframe,
+            params=deepcopy(params),
+            run_config=deepcopy(self.cfg.run_config),
+            timestamp=now,
+        )
+        context["paramhash"] = _md5_short(context["params"])
+        return context
+
+    def _maybe_attach_strategy_obj(self, context: Dict[str, Any]):
+        mod = self._load_strategy_module()
+        if hasattr(mod, "STRATEGY"):
+            strategy_obj = getattr(mod, "STRATEGY")
+        elif hasattr(mod, "Strategy"):
+            strategy_obj = getattr(mod, "Strategy")()
+        else:
+            raise RuntimeError(f"Strategy module strategies.{self.cfg.strategy} missing STRATEGY or Strategy().")
+        context["strategy_obj"] = strategy_obj
+        print(f"[TUNER] strategy_obj attached for {self.cfg.strategy}")
+
+    # ---- Runner (prefers Phase 6 safe_run if available) ----
+    def _run_strategy(self, context: Dict[str, Any], df=None) -> Tuple[pd.Series, pd.DataFrame, str]:
+        equity, trades = None, None
+        log_buf = []
+        try:
+            try:
+                exec_mod = importlib.import_module("orchestrator.safety")
+                safe_run = getattr(exec_mod, "safe_run")
+                res = safe_run(context["strategy_obj"], df, context["run_config"])
+            except Exception:
+                res = context["strategy_obj"].run(df, context["run_config"])
+
+            if isinstance(res, tuple) and len(res) >= 2:
+                equity, trades = res[0], res[1]
+            elif isinstance(res, dict):
+                equity, trades = res.get("equity"), res.get("trades")
+            else:
+                raise RuntimeError("Strategy.run returned unknown format. Expected (equity, trades) or dict.")
+
+            if not isinstance(equity, pd.Series):
+                equity = pd.Series(equity)
+            equity.index = pd.to_datetime(equity.index, utc=True, errors="coerce")
+
+            if not isinstance(trades, pd.DataFrame):
+                trades = pd.DataFrame(trades)
+
+        except Exception as e:
+            log_buf.append("EXCEPTION:\n" + "".join(traceback.format_exception(e)))
+            return pd.Series(dtype=float), pd.DataFrame(), "\n".join(log_buf)
+
+        return equity, trades, "\n".join(log_buf)
+
+    # ---- Objective wrapper ----
+    def __call__(self, trial: optuna.trial.Trial) -> float:
+        # 1) Sample params
+        params = self._sample_params(trial)
+
+        # 2) Build context & attach strategy
+        context = self._build_context(params)
+        # inject trial params for the strategy API
+        if isinstance(context.get("run_config"), dict):
+            context["run_config"].setdefault("params", {}).update(params)
+        self._maybe_attach_strategy_obj(context)
+
+        # 3) Run strategy on real pipeline
+        equity, trades, run_logs = self._run_strategy(context, df=None)
+
+        # 4) Compute OOS slices
+        rc = context["run_config"]
+        oos_start = _to_utc(rc.get("oos_start"))
+        oos_end   = _to_utc(rc.get("oos_end"))
+
+        if _is_dt_index(equity.index):
+            try:
+                mask = (equity.index >= oos_start) & (equity.index <= oos_end)
+                equity_oos = equity.loc[mask]
+            except Exception:
+                equity_oos = equity
+        else:
+            print(f"[WARN] trial={trial.number} equity index is not datetime; using full equity for OOS metrics.")
+            equity_oos = equity
+
+        trades_oos = _filter_oos_trades(trades, oos_start, oos_end)
+
+        # 5) Base metrics + raw objective
+        oos_cagr = _cagr(equity_oos)
+        oos_mdd  = _max_drawdown(equity_oos)
+        oos_mar  = _mar(equity_oos)
+        erpt     = float(np.nan) if trades_oos is None or trades_oos.empty else float(np.nan_to_num(trades_oos.get("pnl_pct", np.nan)).mean())
+        raw_obj  = _compute_objective(self.cfg.objective, equity_oos, trades_oos)
+
+        eq_pts        = int(equity_oos.size)
+        trades_all    = 0 if trades is None else int(len(trades))
+        oos_trades_ct = 0 if trades_oos is None else int(len(trades_oos))
+
+        print(f"[OOS] trial={trial.number} window={rc.get('oos_start')}->{rc.get('oos_end')} eq_pts={eq_pts} trades_all={trades_all} oos_trades={oos_trades_ct} objective={self.cfg.objective}")
+        if trades_all == 0:
+            print(f"[HINT] trial={trial.number} strategy returned 0 trades. Check run_config.inputs paths and your strategy's signal conditions.")
+
+        # 6) Constraints
+        min_trades     = int(self.cfg.constraints.get("min_trades", 0) or 0)
+        min_objective  = float(self.cfg.constraints.get("min_objective", -np.inf))
+        constrained_inf = False
+        constraint_reason = None
+
+        if oos_trades_ct < min_trades:
+            constraint_reason = f"min_trades oos_trades={oos_trades_ct} < {min_trades}"
+            constrained_inf = True
+        elif not (raw_obj > -np.inf) or (raw_obj < min_objective):
+            constraint_reason = f"min_objective raw={raw_obj:.6f} < {min_objective}"
+            constrained_inf = True
+
+        # 7) Robustness penalty
+        penalty = 0.0
+        if not constrained_inf and (self.cfg.robustness or {}).get("enabled", True):
+            penalty = self._robustness_penalty(context, trial)
+
+        final = (-np.inf if constrained_inf else (raw_obj - penalty))
+
+        # 8) Debug prints
+        if constrained_inf:
+            print(f"[CONSTRAINT] trial={trial.number} reason={constraint_reason} raw={raw_obj:.6f}")
+        print(f"[TRIAL {trial.number}] raw={raw_obj:.6f} penalty={penalty:.6f} final={final:.6f}")
+
+        # 9) MLflow logging (+ artifacts)
+        self._log_mlflow(
+            trial, context, params, raw_obj, penalty, final, oos_cagr, oos_mdd, oos_mar, erpt,
+            eq_pts, trades_all, oos_trades_ct, equity, equity_oos, trades, trades_oos, run_logs, constraint_reason
+        )
+
+        return final
+
+    # ---- Param space ----
+    def _sample_params(self, trial: optuna.trial.Trial) -> Dict[str, Any]:
+        # Strategy-defined optuna_space(trial) has priority
+        try:
+            mod = self._load_strategy_module()
+            if hasattr(mod, "optuna_space") and callable(getattr(mod, "optuna_space")):
+                return dict(getattr(mod, "optuna_space")(trial))
+        except Exception:
+            pass
+
+        # Fallback JSON space: configs/spaces/<Strategy>.json
+        space_path = Path("configs") / "spaces" / f"{self.cfg.strategy}.json"
+        if not space_path.exists():
+            raise RuntimeError(f"Search space file not found: {space_path}")
+        with open(space_path, "r", encoding="utf-8-sig") as f:
+            space = json.load(f)
+        return _suggest_from_json(space, trial)
+
+    # ---- Robustness ----
+    def _robustness_penalty(self, base_context: Dict[str, Any], trial: optuna.trial.Trial) -> float:
+        rb = self.cfg.robustness or {}
+        max_checks = int(rb.get("max_checks", 4))
+        param_eps  = float(rb.get("param_eps_percent", 2.0))
+        shift_bars = int(rb.get("oos_shift_bars", 0))
+        lam        = float(rb.get("penalty_lambda", 0.25))
+
+        rc0 = deepcopy(base_context["run_config"])
+        oos_start0 = _to_utc(rc0.get("oos_start"))
+        oos_end0   = _to_utc(rc0.get("oos_end"))
+
+        objs: List[float] = []
+        for _ in range(max_checks):
+            # perturb params
+            p_params = _perturb_params(base_context["params"], param_eps, self._rng)
+
+            # shift OOS window
+            rc = deepcopy(rc0)
+            if shift_bars and self.timeframe_td is not None:
+                shift = int(self._rng.integers(-shift_bars, shift_bars + 1))
+                delta = shift * self.timeframe_td
+                rc["oos_start"] = (oos_start0 + delta).isoformat()
+                rc["oos_end"]   = (oos_end0 + delta).isoformat()
+            else:
+                rc["oos_start"] = oos_start0.isoformat()
+                rc["oos_end"]   = oos_end0.isoformat()
+
+            ctx = self._build_context(p_params)
+            ctx["run_config"] = rc
+            if isinstance(ctx.get("run_config"), dict):
+                ctx["run_config"].setdefault("params", {}).update(p_params)
+            self._maybe_attach_strategy_obj(ctx)
+
+            equity, trades, _ = self._run_strategy(ctx, df=None)
+
+            if _is_dt_index(equity.index):
+                try:
+                    mask = (equity.index >= _to_utc(rc["oos_start"])) & (equity.index <= _to_utc(rc["oos_end"]))
+                    eq_oos = equity.loc[mask]
+                except Exception:
+                    eq_oos = equity
+            else:
+                eq_oos = equity
+
+            tr_oos = _filter_oos_trades(trades, _to_utc(rc["oos_start"]), _to_utc(rc["oos_end"]))
+            objs.append(_compute_objective(self.cfg.objective, eq_oos, tr_oos))
+
+        if not objs:
+            return 0.0
+        std = float(np.nanstd(np.array(objs, dtype=float)))
+        return lam * std
+
+    # ---- MLflow logging ----
+    def _log_mlflow(
+        self,
+        trial: optuna.trial.Trial,
+        context: Dict[str, Any],
+        params: Dict[str, Any],
+        raw_obj: float,
+        penalty: float,
+        final: float,
+        oos_cagr: float,
+        oos_mdd: float,
+        oos_mar: float,
+        erpt: float,
+        eq_pts: int,
+        trades_all: int,
+        oos_trades_ct: int,
+        equity: pd.Series,
+        equity_oos: pd.Series,
+        trades: pd.DataFrame,
+        trades_oos: pd.DataFrame,
+        run_logs: str,
+        constraint_reason: Optional[str],
+    ):
+        mlf_cfg = self.cfg.mlflow or {}
+        enabled = bool(mlf_cfg.get("enabled", True))
+        if not (enabled and mlflow):
+            return
+
+        if mlf_cfg.get("tracking_uri"):
+            mlflow.set_tracking_uri(mlf_cfg["tracking_uri"])
+
+        tags = dict(mlf_cfg.get("tags", {}))
+        tags.update({
+            "study_name": self.study.study_name,
+            "strategy": self.cfg.strategy,
+            "symbol": self.cfg.symbol,
+            "timeframe": self.cfg.timeframe,
+            "objective": self.cfg.objective,
+        })
+
+        run_name = f"trial_{trial.number:04d}"
+        from pathlib import Path as _Path
+        with mlflow.start_run(run_name=run_name, nested=False):
+            mlflow.set_tags(tags)
+            mlflow.log_params({
+                **{f"param.{k}": v for k, v in params.items()},
+                "paramhash": context["paramhash"],
+            })
+            metrics = {
+                "objective.raw": raw_obj,
+                "objective.penalty": penalty,
+                "objective.final": final,
+                "oos.cagr": oos_cagr,
+                "oos.mdd": oos_mdd,
+                "oos.mar": oos_mar,
+                "oos.erpt": 0.0 if math.isnan(erpt) else erpt,
+                "counts.eq_pts": eq_pts,
+                "counts.trades_all": trades_all,
+                "counts.oos_trades": oos_trades_ct,
+                "constrained": 1.0 if constraint_reason else 0.0,
+            }
+            mlflow.log_metrics(metrics)
+
+            tmp = _Path("artifacts") / "studies" / (self.study.study_name or "study") / run_name
+            tmp.mkdir(parents=True, exist_ok=True)
+
+            with open(tmp / "context.json", "w", encoding="utf-8") as f:
+                json.dump({k: v for k, v in context.items() if k != "strategy_obj"}, f, indent=2, default=str)
+
+            try:
+                if equity is not None and not equity.empty:
+                    equity.to_frame("equity").to_csv(tmp / "equity_full.csv", index=True)
+                if equity_oos is not None and not equity_oos.empty:
+                    equity_oos.to_frame("equity").to_csv(tmp / "equity_oos.csv", index=True)
+                if trades is not None and not trades.empty:
+                    trades.to_csv(tmp / "trades_full.csv", index=False)
+                if trades_oos is not None and not trades_oos.empty:
+                    trades_oos.to_csv(tmp / "trades_oos.csv", index=False)
+            except Exception as e:
+                with open(tmp / "artifact_error.txt", "w", encoding="utf-8") as f:
+                    f.write("ARTIFACT SAVE ERROR:\n")
+                    f.write("".join(traceback.format_exception(e)))
+
+            with open(tmp / "debug.txt", "w", encoding="utf-8") as f:
+                f.write(f"[TRIAL {trial.number}] final={final:.6f} raw={raw_obj:.6f} penalty={penalty:.6f}\n")
+                if constraint_reason:
+                    f.write(f"[CONSTRAINT] {constraint_reason}\n")
+                if run_logs:
+                    f.write("\n--- RUN LOGS ---\n")
+                    f.write(run_logs)
+
+            mlflow.log_artifacts(str(tmp))
+
+
+def build_study(cfg: Dict[str, Any]) -> Tuple[optuna.Study, TunerConfig]:
+    tc = TunerConfig(
+        strategy=cfg["strategy"],
+        symbol=cfg["symbol"],
+        timeframe=cfg["timeframe"],
+        run_config=cfg["run_config"],
+        objective=cfg.get("objective", "OOS_MAR"),
+        constraints=cfg.get("constraints", {"min_trades": 0, "min_objective": -np.inf}),
+        robustness=cfg.get("robustness", {"enabled": True}),
+        optuna=cfg.get("optuna", {}),
+        mlflow=cfg.get("mlflow", {"enabled": True}),
+    )
+
+    samp_name = (tc.optuna.get("sampler") or "tpe").lower()
+    if samp_name == "tpe":
+        sampler = optuna.samplers.TPESampler(seed=42)
+    elif samp_name == "random":
+        sampler = optuna.samplers.RandomSampler(seed=42)
+    else:
+        sampler = optuna.samplers.TPESampler(seed=42)
+
+    pruner_name = (tc.optuna.get("pruner") or "median").lower()
+    if pruner_name == "median":
+        pruner = optuna.pruners.MedianPruner()
+    elif pruner_name == "nop":
+        pruner = optuna.pruners.NopPruner()
+    else:
+        pruner = optuna.pruners.MedianPruner()
+
+    direction = tc.optuna.get("direction", "maximize")
+    study_name = tc.optuna.get("study_name", f"{tc.strategy}_{tc.symbol}_{tc.timeframe}_{tc.objective}")
+    storage = tc.optuna.get("storage", None)
+
+    if storage:
+        study = optuna.create_study(study_name=study_name, direction=direction,
+                                    sampler=sampler, pruner=pruner,
+                                    storage=storage, load_if_exists=True)
+    else:
+        study = optuna.create_study(study_name=study_name, direction=direction,
+                                    sampler=sampler, pruner=pruner)
+    return study, tc
+
+
+
+
+
+
+

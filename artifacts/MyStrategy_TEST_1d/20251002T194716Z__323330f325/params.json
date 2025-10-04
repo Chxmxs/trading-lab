@@ -1,0 +1,16 @@
+{
+  "strategy": "MyStrategy",
+  "symbol": "TEST",
+  "timeframe": "1d",
+  "params": {
+    "lookback": 5,
+    "risk_pct": 0.01
+  },
+  "config": {
+    "cash": 100000.0,
+    "fees": null,
+    "slippage": null,
+    "start": "2025-01-01T00:00:00Z",
+    "end": "2025-01-05T00:00:00Z"
+  }
+}

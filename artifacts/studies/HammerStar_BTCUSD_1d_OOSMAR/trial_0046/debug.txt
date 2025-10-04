@@ -1,0 +1,2 @@
+[TRIAL 46] final=-inf raw=1.014600 penalty=0.000000
+[CONSTRAINT] min_trades oos_trades=6 < 20

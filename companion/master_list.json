@@ -1,0 +1,41 @@
+﻿[
+  {
+    "name": "sweep_0",
+    "metrics": {
+      "cagr": 35.57055527998345,
+      "max_drawdown": -0.33512009268004017,
+      "mar": 214.0841725591851,
+      "sharpe": 0.1916789220423022,
+      "num_trades": 60368.125
+    },
+    "source": "sweep",
+    "rank": 1,
+    "score": 6268.299228396881
+  },
+  {
+    "name": "sweep_1",
+    "metrics": {
+      "cagr": 6.499150291542511,
+      "max_drawdown": -0.28459378921461487,
+      "mar": 66.0423073225018,
+      "sharpe": 0.19851535649682153,
+      "num_trades": 41383.25
+    },
+    "source": "sweep",
+    "rank": 2,
+    "score": 70.08353348985376
+  },
+  {
+    "name": "sweep_2",
+    "metrics": {
+      "cagr": -0.0011154032463961683,
+      "max_drawdown": -0.010695386694918575,
+      "mar": NaN,
+      "sharpe": NaN,
+      "num_trades": 1.625
+    },
+    "source": "sweep",
+    "rank": 3,
+    "score": NaN
+  }
+]

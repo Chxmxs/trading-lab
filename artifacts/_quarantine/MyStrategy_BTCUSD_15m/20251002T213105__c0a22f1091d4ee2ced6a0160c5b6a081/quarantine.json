@@ -1,0 +1,25 @@
+{
+  "exception_message": "run_one_core(context) needs either context['job_callable'] (callable) OR context['strategy_obj'] with .run(df, run_config).",
+  "exception_type": "RuntimeError",
+  "job": {
+    "params": {
+      "lookback": 75,
+      "risk_per_trade": 0.009651488457703583,
+      "threshold": 0.4686219988769732,
+      "use_trailing": false
+    },
+    "strategy": "MyStrategy",
+    "symbol": "BTCUSD",
+    "timeframe": "15m"
+  },
+  "key": "MyStrategy_BTCUSD_15m",
+  "paths": {
+    "artifact_dir": "artifacts\\_boot\\MyStrategy_BTCUSD_15m\\20251002T213105__c0a22f1091d4ee2ced6a0160c5b6a081",
+    "cv_dir": null,
+    "quarantine_dir": "artifacts\\_quarantine\\MyStrategy_BTCUSD_15m\\20251002T213105__c0a22f1091d4ee2ced6a0160c5b6a081"
+  },
+  "reason": "persistent",
+  "timestamps": {
+    "utc": "2025-10-02T21:31:05Z"
+  }
+}

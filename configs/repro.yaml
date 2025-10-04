@@ -1,0 +1,17 @@
+# Reproducibility guardrails (do not change casually)
+seed:
+  global: 777
+time:
+  timezone: UTC
+  dataset_window:
+    start: "2017-01-01T00:00:00Z"
+    end:   "2025-03-14T23:59:59Z"
+resample:
+  closed: right
+  label: right
+splits:
+  train:       ["2017-01-01T00:00:00Z", "2020-12-31T23:59:59Z"]
+  validation:  ["2021-01-01T00:00:00Z", "2023-12-31T23:59:59Z"]
+  test:        ["2024-01-01T00:00:00Z", "2025-03-14T23:59:59Z"]
+embargo:
+  formula: "LOOKBACK_BARS + LABEL_HORIZON_BARS"

@@ -1,0 +1,1 @@
+[TRIAL 1] final=0.723626 raw=0.729816 penalty=0.006190

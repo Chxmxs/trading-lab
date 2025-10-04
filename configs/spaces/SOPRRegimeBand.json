@@ -1,0 +1,59 @@
+﻿{
+    "band_low":  {
+                     "type":  "float",
+                     "low":  0.92,
+                     "high":  1.005
+                 },
+    "band_high":  {
+                      "type":  "float",
+                      "low":  0.995,
+                      "high":  1.08
+                  },
+    "band_pad":  {
+                     "type":  "float",
+                     "low":  0.000,
+                     "high":  0.02
+                 },
+    "ma_short":  {
+                     "type":  "int",
+                     "low":  5,
+                     "high":  10
+                 },
+    "ma_regime":  {
+                      "type":  "int",
+                      "low":  60,
+                      "high":  120,
+                      "step":  5
+                  },
+    "tp_pct":  {
+                   "type":  "float",
+                   "low":  0.050,
+                   "high":  0.080
+               },
+    "sl_pct":  {
+                   "type":  "float",
+                   "low":  0.040,
+                   "high":  0.070
+               },
+    "sopr_tp_bull":  {
+                         "type":  "float",
+                         "low":  1.03,
+                         "high":  1.08
+                     },
+    "sopr_tp_bear":  {
+                         "type":  "float",
+                         "low":  0.92,
+                         "high":  0.98
+                     },
+    "regime_eps":  {
+                       "type":  "float",
+                       "low":  0.000,
+                       "high":  0.02
+                   },
+    "max_hold_days":  {
+                          "type":  "int",
+                          "low":  30,
+                          "high":  180,
+                          "step":  10
+                      }
+}

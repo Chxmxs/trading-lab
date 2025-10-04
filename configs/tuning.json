@@ -1,0 +1,46 @@
+﻿{
+    "strategy":  "HammerStarReversal",
+    "symbol":  "BTCUSD",
+    "timeframe":  "1d",
+    "run_config":  {
+                       "start":  "2015-01-01",
+                       "end":  "2025-03-23",
+                       "oos_start":  "2022-01-01",
+                       "oos_end":  "2024-12-31",
+                       "fees_bps":  5,
+                       "slippage_bps":  2,
+                       "inputs":  {
+                                      "price_csv":  "data/cleaned/ohlcv_BTCUSD@1d.csv"
+                                  }
+                   },
+    "objective":  "OOS_MAR",
+    "constraints":  {
+                        "min_trades":  5,
+                        "min_objective":  0.1
+                    },
+    "robustness":  {
+                       "enabled":  true,
+                       "max_checks":  4,
+                       "param_eps_percent":  2.0,
+                       "oos_shift_bars":  50,
+                       "penalty_lambda":  0.25
+                   },
+    "optuna":  {
+                   "n_trials":  60,
+                   "sampler":  "tpe",
+                   "pruner":  "median",
+                   "storage":  null,
+                   "study_name":  "HammerStar_BTCUSD_1d_OOSMAR",
+                   "direction":  "maximize",
+                   "plateau_patience":  10,
+                   "plateau_epsilon":  0.002
+               },
+    "mlflow":  {
+                   "enabled":  true,
+                   "experiment_name":  "HammerStar_BTCUSD_1d",
+                   "tracking_uri":  null,
+                   "tags":  {
+                                "study_id":  "exp_sopr2025"
+                            }
+               }
+}

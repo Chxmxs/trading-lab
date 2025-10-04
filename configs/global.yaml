@@ -1,0 +1,16 @@
+version: 1
+costs:
+  fee_per_side: 0.0004      # 4 bps per side (taker-like)
+  slippage_per_side: 0.0005 # 5 bps per side
+  spread_penalty: 0.0
+leverage:
+  max_leverage: 1.0         # start unlevered; change only with a version bump
+sizing:
+  mode: fraction_of_equity
+  fraction: 0.10            # 10% of equity per independent position
+  max_gross_exposure: 1.0
+risk:
+  allow_pyramiding: false
+logging:
+  mlflow_tracking_uri: "file:///C:/Users/Gladiator/trading-lab/mlruns"
+  artifact_root: "C:/Users/Gladiator/trading-lab/artifacts"

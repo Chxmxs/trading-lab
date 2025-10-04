@@ -1,0 +1,2 @@
+[TRIAL 2] final=-inf raw=-inf penalty=0.000000
+[CONSTRAINT] min_objective raw=-inf < -1000000000.0

@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "C:\Users\Gladiator\trading-lab\common\error_handling.py", line 313, in wrap_with_error_capture
+    result = with_backoff(
+             ^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\common\error_handling.py", line 102, in with_backoff
+    return fn()
+           ^^^^
+  File "C:\Users\Gladiator\trading-lab\orchestrator\orchestrate.py", line 53, in <lambda>
+    return wrapper(lambda: executor(context), context=context, mlflow_cfg=mlflow_cfg, max_retries=max_retries)
+                           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\orchestrator\execute.py", line 30, in run_one_core
+    equity, trades = strat.run(df, run_config)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\strategies\SOPRRegimeBand.py", line 233, in run
+    price_d = _get_daily_price(df)
+              ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\strategies\SOPRRegimeBand.py", line 122, in _get_daily_price
+    daily.index = daily.index.tz_localize("UTC")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\core\indexes\datetimes.py", line 293, in tz_localize
+    arr = self._data.tz_localize(tz, ambiguous, nonexistent)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\core\arrays\_mixins.py", line 81, in method
+    return meth(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\anaconda3\envs\tradebot\Lib\site-packages\pandas\core\arrays\datetimes.py", line 1083, in tz_localize
+    raise TypeError("Already tz-aware, use tz_convert to convert.")
+TypeError: Already tz-aware, use tz_convert to convert.

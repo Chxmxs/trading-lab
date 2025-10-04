@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trading_lab"
+version = "0.1.0"
+description = "Reproducible trading research guardrails and skeleton."
+readme = "README.md"
+requires-python = "==3.11.13"
+authors = [{name="Gladiator"}]
+dependencies = []  # conda/pip installs are managed at the environment level
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["trading_lab*"]

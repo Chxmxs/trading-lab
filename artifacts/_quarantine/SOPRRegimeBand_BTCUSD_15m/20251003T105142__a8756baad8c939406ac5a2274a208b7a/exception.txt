@@ -1,0 +1,1 @@
+RuntimeError: run_one_core(context) needs either context['job_callable'] (callable) OR context['strategy_obj'] with .run(df, run_config).

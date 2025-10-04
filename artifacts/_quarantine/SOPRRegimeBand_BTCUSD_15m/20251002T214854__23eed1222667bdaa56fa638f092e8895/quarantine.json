@@ -1,0 +1,31 @@
+{
+  "exception_message": "[Errno 2] No such file or directory: 'data\\\\metrics\\\\sopr@1d.csv'",
+  "exception_type": "FileNotFoundError",
+  "job": {
+    "params": {
+      "band_high": 1.0075553279644325,
+      "band_low": 0.9708854140754646,
+      "ma_regime": 110,
+      "ma_short": 5,
+      "max_hold_days": 80,
+      "regime_eps": 0.00855018331722346,
+      "sl_pct": 0.05862248623417009,
+      "sopr_tp_bear": 0.9229361877653918,
+      "sopr_tp_bull": 1.0485096544998422,
+      "tp_pct": 0.0771314914179697
+    },
+    "strategy": "SOPRRegimeBand",
+    "symbol": "BTCUSD",
+    "timeframe": "15m"
+  },
+  "key": "SOPRRegimeBand_BTCUSD_15m",
+  "paths": {
+    "artifact_dir": "artifacts\\_boot\\SOPRRegimeBand_BTCUSD_15m\\20251002T214854__23eed1222667bdaa56fa638f092e8895",
+    "cv_dir": null,
+    "quarantine_dir": "artifacts\\_quarantine\\SOPRRegimeBand_BTCUSD_15m\\20251002T214854__23eed1222667bdaa56fa638f092e8895"
+  },
+  "reason": "persistent",
+  "timestamps": {
+    "utc": "2025-10-02T21:48:55Z"
+  }
+}

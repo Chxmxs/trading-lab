@@ -1,0 +1,31 @@
+{
+  "exception_message": "'NoneType' object has no attribute 'columns'",
+  "exception_type": "AttributeError",
+  "job": {
+    "params": {
+      "band_high": 1.0236313401695736,
+      "band_low": 0.9800917895445681,
+      "ma_regime": 115,
+      "ma_short": 7,
+      "max_hold_days": 90,
+      "regime_eps": 0.004504234945212882,
+      "sl_pct": 0.04603341496084044,
+      "sopr_tp_bear": 0.9678200096435022,
+      "sopr_tp_bull": 1.0387236913597804,
+      "tp_pct": 0.07867743047033646
+    },
+    "strategy": "SOPRRegimeBand",
+    "symbol": "BTCUSD",
+    "timeframe": "15m"
+  },
+  "key": "SOPRRegimeBand_BTCUSD_15m",
+  "paths": {
+    "artifact_dir": "artifacts\\_boot\\SOPRRegimeBand_BTCUSD_15m\\20251002T214227__850392e5c325142ab72461a910b83c56",
+    "cv_dir": null,
+    "quarantine_dir": "artifacts\\_quarantine\\SOPRRegimeBand_BTCUSD_15m\\20251002T214227__850392e5c325142ab72461a910b83c56"
+  },
+  "reason": "persistent",
+  "timestamps": {
+    "utc": "2025-10-02T21:42:27Z"
+  }
+}

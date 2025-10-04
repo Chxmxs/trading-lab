@@ -1,0 +1,15 @@
+{
+  "symbols": ["TEST"],
+  "timeframes": ["1d"],
+  "strategies": [],
+  "param_grid": { "lookback": [5, 10], "risk_pct": [0.01, 0.02] },
+  "cash": 100000,
+  "fees": null,
+  "slippage": null,
+  "start": "2025-01-01T00:00:00Z",
+  "end":   "2025-01-05T00:00:00Z",
+  "parallel": { "backend": "multiprocessing", "max_workers": 2 },
+  "optimization": { "use_optuna": false, "trials": 30 },
+  "mlflow": { "enabled": false, "tracking_uri": "file:./mlruns", "experiment": "orchestrator" },
+  "cv": { "enabled": true, "backend": "mlfinlab", "n_splits": 5, "embargo": "2D", "label_store_dir": "label_store" }
+}

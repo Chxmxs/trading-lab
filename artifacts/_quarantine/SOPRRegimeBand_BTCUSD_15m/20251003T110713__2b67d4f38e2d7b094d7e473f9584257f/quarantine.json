@@ -1,0 +1,32 @@
+{
+  "exception_message": "_maybe_attach_strategy_obj.<locals>.<lambda>() missing 1 required positional argument: 'run_cfg'",
+  "exception_type": "TypeError",
+  "job": {
+    "params": {
+      "band_high": 1.024912319186807,
+      "band_low": 0.9901805125089503,
+      "band_pad": 0.0023885929496762557,
+      "ma_regime": 120,
+      "ma_short": 5,
+      "max_hold_days": 110,
+      "regime_eps": 0.0005130225921068843,
+      "sl_pct": 0.06133374813678594,
+      "sopr_tp_bear": 0.9763136993663659,
+      "sopr_tp_bull": 1.0345481158988232,
+      "tp_pct": 0.059261900102984835
+    },
+    "strategy": "SOPRRegimeBand",
+    "symbol": "BTCUSD",
+    "timeframe": "15m"
+  },
+  "key": "SOPRRegimeBand_BTCUSD_15m",
+  "paths": {
+    "artifact_dir": "artifacts\\_boot\\SOPRRegimeBand_BTCUSD_15m\\20251003T110713__2b67d4f38e2d7b094d7e473f9584257f",
+    "cv_dir": null,
+    "quarantine_dir": "artifacts\\_quarantine\\SOPRRegimeBand_BTCUSD_15m\\20251003T110713__2b67d4f38e2d7b094d7e473f9584257f"
+  },
+  "reason": "persistent",
+  "timestamps": {
+    "utc": "2025-10-03T11:07:13Z"
+  }
+}

@@ -1,0 +1,1540 @@
+ohlcv:
+  BTCUSD@1m:
+    path: data/cleaned/ohlcv_BTCUSD@1m.csv
+    tz: UTC
+  BTCUSD@5m:
+    path: data/cleaned/ohlcv_BTCUSD@5m.csv
+    tz: UTC
+  BTCUSD@15m:
+    path: data/cleaned/ohlcv_BTCUSD@15m.csv
+    tz: UTC
+  BTCUSD@30m:
+    path: data/cleaned/ohlcv_BTCUSD@30m.csv
+    tz: UTC
+  BTCUSD@60m:
+    path: data/cleaned/ohlcv_BTCUSD@60m.csv
+    tz: UTC
+  BTCUSD@240m:
+    path: data/cleaned/ohlcv_BTCUSD@240m.csv
+    tz: UTC
+  BTCUSD@720m:
+    path: data/cleaned/ohlcv_BTCUSD@720m.csv
+    tz: UTC
+  BTCUSD@1d:
+    path: data/cleaned/ohlcv_BTCUSD@1d.csv
+    tz: UTC
+  ETHUSD@1m:
+    path: data/cleaned/ohlcv_ETHUSD@1m.csv
+    tz: UTC
+  ETHUSD@5m:
+    path: data/cleaned/ohlcv_ETHUSD@5m.csv
+    tz: UTC
+  ETHUSD@15m:
+    path: data/cleaned/ohlcv_ETHUSD@15m.csv
+    tz: UTC
+  ETHUSD@30m:
+    path: data/cleaned/ohlcv_ETHUSD@30m.csv
+    tz: UTC
+  ETHUSD@60m:
+    path: data/cleaned/ohlcv_ETHUSD@60m.csv
+    tz: UTC
+  ETHUSD@240m:
+    path: data/cleaned/ohlcv_ETHUSD@240m.csv
+    tz: UTC
+  ETHUSD@720m:
+    path: data/cleaned/ohlcv_ETHUSD@720m.csv
+    tz: UTC
+  ETHUSD@1d:
+    path: data/cleaned/ohlcv_ETHUSD@1d.csv
+    tz: UTC
+  BITCOIN PRICE & VOLUME - SPOT, ALL EXCHANGES, BTC-USD - DAY@1m:
+    path: data/cleaned/ohlcv_BITCOIN PRICE & VOLUME - SPOT, ALL EXCHANGES, BTC-USD
+      - DAY@1m.csv
+    tz: UTC
+  BITCOIN PRICE & VOLUME KRW - SPOT - DAY@1m:
+    path: data/cleaned/ohlcv_BITCOIN PRICE & VOLUME KRW - SPOT - DAY@1m.csv
+    tz: UTC
+  ETHEREUM PRICE & VOLUME - SPOT, ALL EXCHANGES, ETH-USD - DAY@1m:
+    path: data/cleaned/ohlcv_ETHEREUM PRICE & VOLUME - SPOT, ALL EXCHANGES, ETH-USD
+      - DAY@1m.csv
+    tz: UTC
+  ETHEREUM PRICE & VOLUME KRW - SPOT - DAY@1m:
+    path: data/cleaned/ohlcv_ETHEREUM PRICE & VOLUME KRW - SPOT - DAY@1m.csv
+    tz: UTC
+metric:
+  btc.active_addresses@1d:
+    path: data/cleaned/metric_btc.active_addresses@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.active_receiving_addresses@1d:
+    path: data/cleaned/metric_btc.active_receiving_addresses@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.active_sending_addresses@1d:
+    path: data/cleaned/metric_btc.active_sending_addresses@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.adjusted_sopr@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Adjusted SOPR (aSOPR) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.all_entities_supply@1d:
+    path: data/cleaned/metric_btc.all_entities_supply@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.average_cap@1d:
+    path: data/cleaned/metric_btc.average_cap@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.average_dormancy@1d:
+    path: data/cleaned/metric_btc.average_dormancy@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.average_supply_adjusted_cdd@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Average Supply-Adjusted CDD - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.binary_cdd@1d:
+    path: data/cleaned/metric_btc.binary_cdd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.block_interval_mean@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Block Interval (Mean) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.block_rewards@1d:
+    path: data/cleaned/metric_btc.block_rewards@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.block_rewards_usd@1d:
+    path: data/cleaned/metric_btc.block_rewards_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.block_size_mean@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Block Size (Mean) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.blocks_mined@1d:
+    path: data/cleaned/metric_btc.blocks_mined@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.cdd@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Coin Days Destroyed (CDD) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.coinbase_premium_gap@1d:
+    path: data/cleaned/metric_btc.coinbase_premium_gap@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.coinbase_premium_index@1d:
+    path: data/cleaned/metric_btc.coinbase_premium_index@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.delta_cap@1d:
+    path: data/cleaned/metric_btc.delta_cap@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.difficulty@1d:
+    path: data/cleaned/metric_btc.difficulty@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.estimated_leverage_ratio_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Estimated Leverage Ratio - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_mean_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Inflow (Mean) - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_mean_ma7_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Inflow (Mean, MA7) - All
+      Exchanges - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_top10_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Inflow (Top10) - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_total_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Inflow (Total) - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_spent_output_age_bands_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Inflow - Spent Output Age
+      Bands - All Exchanges - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_outflow_mean_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Outflow (Mean) - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_outflow_mean_ma7_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Outflow (Mean, MA7) - All
+      Exchanges - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_outflow_total_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Outflow (Total) - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_reserve_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Reserve - All Exchanges -
+      Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_reserve_usd_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Reserve USD - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_supply@1d:
+    path: data/cleaned/metric_btc.exchange_supply@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_supply_ratio_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Supply Ratio - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_miner_mean_all_exchanges_all_miners@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange to Miner Flow (Mean) - All
+      Exchanges, All Miners - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_miner_total_all_exchanges_all_miners@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange to Miner Flow (Total) - All
+      Exchanges, All Miners - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Fees (Total) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_tx_mean@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Fees per Transaction (Mean) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_tx_median@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Fees per Transaction (Median) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_usd_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Fees USD (Total) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.funding_rates_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Funding Rates - All Exchanges - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.hashrate@1d:
+    path: data/cleaned/metric_btc.hashrate@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.korea_premium_index@1d:
+    path: data/cleaned/metric_btc.korea_premium_index@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.long_liquidations_all_exchanges_all_symbol@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Long Liquidations - All Exchanges,
+      All Symbol - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.long_liquidations_usd_all_exchanges_all_symbol@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Long Liquidations USD - All Exchanges,
+      All Symbol - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.long_term_holder_sopr@1d:
+    path: data/cleaned/metric_btc.long_term_holder_sopr@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.market_cap@1d:
+    path: data/cleaned/metric_btc.market_cap@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.mean_coin_age@1d:
+    path: data/cleaned/metric_btc.mean_coin_age@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.realized_price@1d:
+    path: data/cleaned/metric_btc.realized_price@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.short_liquidations_all_exchanges_all_symbol@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Short Liquidations - All Exchanges,
+      All Symbol - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.short_liquidations_usd_all_exchanges_all_symbol@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Short Liquidations USD - All Exchanges,
+      All Symbol - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.short_term_holder_sopr@1d:
+    path: data/cleaned/metric_btc.short_term_holder_sopr@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.sopr@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Spent Output Profit Ratio (SOPR) -
+      Day.csv
+    tz: UTC
+    value_column: Value
+  btc.stablecoin_supply_ratio_ssr@1d:
+    path: data/cleaned/metric_btc.stablecoin_supply_ratio_ssr@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.stock_to_flow_ratio@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Stock-to-Flow Ratio - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.supply_in_profit@1d:
+    path: data/cleaned/metric_btc.supply_in_profit@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.supply_in_loss@1d:
+    path: data/cleaned/metric_btc.supply_in_loss@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.tokens_transferred_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Tokens Transferred (Total) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.transaction_count_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Transaction Count (Total) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_count@1d:
+    path: data/cleaned/metric_btc.utxo_count@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.velocity@1d:
+    path: data/cleaned/metric_btc.velocity@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.active_addresses@1d:
+    path: data/cleaned/metric_eth.active_addresses@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.active_receiving_addresses@1d:
+    path: data/cleaned/metric_eth.active_receiving_addresses@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.active_sending_addresses@1d:
+    path: data/cleaned/metric_eth.active_sending_addresses@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.block_interval_mean@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Block Interval (Mean) - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.block_rewards@1d:
+    path: data/cleaned/metric_eth.block_rewards@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.block_rewards_usd@1d:
+    path: data/cleaned/metric_eth.block_rewards_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_inflow_total_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Exchange Inflow (Total) - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_outflow_total_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Exchange Outflow (Total) - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_reserve_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Exchange Reserve - All Exchanges
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Fees (Total) - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.funding_rates_all_exchanges@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Funding Rates - All Exchanges - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.hashrate@1d:
+    path: data/cleaned/metric_eth.hashrate@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.market_cap@1d:
+    path: data/cleaned/metric_eth.market_cap@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.price_volume_spot_all_exchanges_usd@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Price & Volume - Spot, All Exchanges,
+      ETH-USD - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.tokens_transferred_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Tokens Transferred (Total) - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.total_supply@1d:
+    path: data/cleaned/metric_eth.total_supply@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transaction_count_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Transaction Count (Total) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.adjusted_sopr_asopr@1d:
+    path: data/cleaned/metric_btc.adjusted_sopr_asopr@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.average_supply-adjusted_cdd@1d:
+    path: data/cleaned/metric_btc.average_supply-adjusted_cdd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.block_interval__mean@1d:
+    path: data/cleaned/metric_btc.block_interval__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.block_size__mean@1d:
+    path: data/cleaned/metric_btc.block_size__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.coin_days_destroyed_cdd@1d:
+    path: data/cleaned/metric_btc.coin_days_destroyed_cdd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.estimated_leverage_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.estimated_leverage_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_active_receiver_addresses_log-scaled@1d:
+    path: data/cleaned/metric_btc.exchange_active_receiver_addresses_log-scaled@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_active_sender_addresses_log-scaled@1d:
+    path: data/cleaned/metric_btc.exchange_active_sender_addresses_log-scaled@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_depositing_addresses_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_depositing_addresses_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_depositing_transactions_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_depositing_transactions_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_in-house_flow__mean_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_in-house_flow__mean_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_in-house_flow__total_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_in-house_flow__total_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_in-house_transactions_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_in-house_transactions_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow__mean_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow__mean_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_mean_ma7_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow_mean_ma7_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_top10_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow_top10_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow__total_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow__total_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_-_spent_output_age_bands_%_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow_-_spent_output_age_bands_%_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_-_spent_output_age_bands_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow_-_spent_output_age_bands_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_-_spent_output_value_bands_%_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow_-_spent_output_value_bands_%_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_-_spent_output_value_bands_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow_-_spent_output_value_bands_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_inflow_cdd_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_inflow_cdd_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_miner_supply@1d:
+    path: data/cleaned/metric_btc.exchange_miner_supply@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_netflow__total_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_netflow__total_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_outflow__mean_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_outflow__mean_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_outflow_mean_ma7_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_outflow_mean_ma7_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_outflow_top10_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_outflow_top10_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_outflow__total_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_outflow__total_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_reserve_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_reserve_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_reserve_ratio_kyc_vs_non-kyc@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Reserve Ratio (KYC vs. Non-KYC)
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_reserve_ratio_us_vs_off-shore@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Reserve Ratio (U.S. vs. Off-Shore)
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_reserve_usd_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_reserve_usd_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_shutdown_index_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_shutdown_index_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_stablecoins_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_stablecoins_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_stablecoins_ratio_usd_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_stablecoins_ratio_usd_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_supply_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_supply_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_exchange_flow__mean_-_all_exchanges_spot_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_to_exchange_flow__mean_-_all_exchanges_spot_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_exchange_flow__total_-_all_exchanges_spot_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_to_exchange_flow__total_-_all_exchanges_spot_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_exchange_transactions_-_all_exchanges_spot_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_to_exchange_transactions_-_all_exchanges_spot_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_miner_flow__mean_-_all_exchanges_all_miners@1d:
+    path: data/cleaned/metric_btc.exchange_to_miner_flow__mean_-_all_exchanges_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_miner_flow__total_-_all_exchanges_all_miners@1d:
+    path: data/cleaned/metric_btc.exchange_to_miner_flow__total_-_all_exchanges_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_miner_transactions_-_all_exchanges_all_miners@1d:
+    path: data/cleaned/metric_btc.exchange_to_miner_transactions_-_all_exchanges_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_token_transferred_log-scaled@1d:
+    path: data/cleaned/metric_btc.exchange_token_transferred_log-scaled@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_token_transferred_ratio_kyc_vs_non-kyc@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Token Transferred Ratio (KYC
+      VS. Non-KYC) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_token_transferred_ratio_us_vs_off-shore@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange Token Transferred Ratio (US
+      VS. Off-shore) - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_whale_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_whale_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_withdrawing_addresses_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_withdrawing_addresses_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_withdrawing_transactions_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.exchange_withdrawing_transactions_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees__total@1d:
+    path: data/cleaned/metric_btc.fees__total@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_block__mean@1d:
+    path: data/cleaned/metric_btc.fees_per_block__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_block_usd__mean@1d:
+    path: data/cleaned/metric_btc.fees_per_block_usd__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_transaction__mean@1d:
+    path: data/cleaned/metric_btc.fees_per_transaction__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_transaction__median@1d:
+    path: data/cleaned/metric_btc.fees_per_transaction__median@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_transaction_usd__mean@1d:
+    path: data/cleaned/metric_btc.fees_per_transaction_usd__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_per_transaction_usd__median@1d:
+    path: data/cleaned/metric_btc.fees_per_transaction_usd__median@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_to_reward_ratio@1d:
+    path: data/cleaned/metric_btc.fees_to_reward_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fees_usd__total@1d:
+    path: data/cleaned/metric_btc.fees_usd__total@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_flow_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.fund_flow_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_holdings_-_all_symbol@1d:
+    path: data/cleaned/metric_btc.fund_holdings_-_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_market_premium_-_all_symbol@1d:
+    path: data/cleaned/metric_btc.fund_market_premium_-_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_price__usd_-_gbtc@1d:
+    path: data/cleaned/metric_btc.fund_price__usd_-_gbtc@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_to_all_exchange_reserve_ratio@1d:
+    path: data/cleaned/metric_btc.fund_to_all_exchange_reserve_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_to_kyc'd_exchange_reserve_ratio@1d:
+    path: data/cleaned/metric_btc.fund_to_kyc'd_exchange_reserve_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_to_non-kyc'd_exchange_reserve_ratio@1d:
+    path: data/cleaned/metric_btc.fund_to_non-kyc'd_exchange_reserve_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.fund_volume_-_all_symbol@1d:
+    path: data/cleaned/metric_btc.fund_volume_-_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.funding_rates_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.funding_rates_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.futures_taker_cvdcumulative_volume_delta_90-day@1d:
+    path: data/cleaned/metric_btc.futures_taker_cvdcumulative_volume_delta_90-day@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.geographical_supply_distribution_by_entities@1d:
+    path: data/cleaned/metric_btc.geographical_supply_distribution_by_entities@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.long_liquidations_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_btc.long_liquidations_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.long_liquidations_usd_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_btc.long_liquidations_usd_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.mean_coin_dollar_age@1d:
+    path: data/cleaned/metric_btc.mean_coin_dollar_age@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_depositing_addresses_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_depositing_addresses_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_depositing_transactions_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_depositing_transactions_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_in-house_flow__mean_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_in-house_flow__mean_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_in-house_flow__total_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_in-house_flow__total_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_in-house_transactions_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_in-house_transactions_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_inflow__mean_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_inflow__mean_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_inflow_mean_ma7_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_inflow_mean_ma7_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_inflow_top10_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_inflow_top10_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_inflow__total_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_inflow__total_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_netflow_total_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_netflow_total_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_outflow__mean_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_outflow__mean_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_outflow_mean_ma7_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_outflow_mean_ma7_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_outflow_top10_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_outflow_top10_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_outflow__total_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_outflow__total_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_reserve_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_reserve_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_reserve_usd_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_reserve_usd_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_selling_power_log-scaled@1d:
+    path: data/cleaned/metric_btc.miner_selling_power_log-scaled@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_supply_ratio_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_supply_ratio_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_to_exchange_flow__mean_-_all_miners_all_exchanges@1d:
+    path: data/cleaned/metric_btc.miner_to_exchange_flow__mean_-_all_miners_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_to_exchange_flow__total_-_all_miners_all_exchanges@1d:
+    path: data/cleaned/metric_btc.miner_to_exchange_flow__total_-_all_miners_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_to_exchange_transactions_-_all_miners_all_exchanges@1d:
+    path: data/cleaned/metric_btc.miner_to_exchange_transactions_-_all_miners_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_to_miner_flow__mean_-_all_miners_1thash@1d:
+    path: data/cleaned/metric_btc.miner_to_miner_flow__mean_-_all_miners_1thash@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_to_miner_flow__total_-_all_miners_1thash@1d:
+    path: data/cleaned/metric_btc.miner_to_miner_flow__total_-_all_miners_1thash@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_to_miner_transactions_-_all_miners_1thash@1d:
+    path: data/cleaned/metric_btc.miner_to_miner_transactions_-_all_miners_1thash@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_withdrawing_addresses_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_withdrawing_addresses_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miner_withdrawing_transactions_-_all_miners@1d:
+    path: data/cleaned/metric_btc.miner_withdrawing_transactions_-_all_miners@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.miners'_position_index_mpi@1d:
+    path: data/cleaned/metric_btc.miners'_position_index_mpi@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.mvrv_ratio@1d:
+    path: data/cleaned/metric_btc.mvrv_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.net_realized_profit_loss_nrpl@1d:
+    path: data/cleaned/metric_btc.net_realized_profit_loss_nrpl@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.net_unrealized_loss_nul@1d:
+    path: data/cleaned/metric_btc.net_unrealized_loss_nul@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.net_unrealized_profit_nup@1d:
+    path: data/cleaned/metric_btc.net_unrealized_profit_nup@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.net_unrealized_profit_loss_nupl@1d:
+    path: data/cleaned/metric_btc.net_unrealized_profit_loss_nupl@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.new_supply@1d:
+    path: data/cleaned/metric_btc.new_supply@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.number_of_entities@1d:
+    path: data/cleaned/metric_btc.number_of_entities@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.nvm_ratio@1d:
+    path: data/cleaned/metric_btc.nvm_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.nvt_golden_cross@1d:
+    path: data/cleaned/metric_btc.nvt_golden_cross@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.nvt_ratio@1d:
+    path: data/cleaned/metric_btc.nvt_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.open_interest_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_btc.open_interest_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.plustoken_interflow_analysis@1d:
+    path: data/cleaned/metric_btc.plustoken_interflow_analysis@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.plustoken_reserve_analysis@1d:
+    path: data/cleaned/metric_btc.plustoken_reserve_analysis@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.price_volume_-_spot_all_exchanges_btc-usd@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Price & Volume - Spot, All Exchanges,
+      BTC-USD - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.price_volume_krw_-_spot@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Price & Volume KRW - Spot - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.puell_multiple@1d:
+    path: data/cleaned/metric_btc.puell_multiple@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.realized_cap@1d:
+    path: data/cleaned/metric_btc.realized_cap@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.realized_cap_-_utxo_age_bands_%@1d:
+    path: data/cleaned/metric_btc.realized_cap_-_utxo_age_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.realized_cap_-_utxo_age_bands_usd@1d:
+    path: data/cleaned/metric_btc.realized_cap_-_utxo_age_bands_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.realized_cap_-_utxo_value_bands_%@1d:
+    path: data/cleaned/metric_btc.realized_cap_-_utxo_value_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.realized_cap_-_utxo_value_bands_usd@1d:
+    path: data/cleaned/metric_btc.realized_cap_-_utxo_value_bands_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.realized_price_-_utxo_age_bands@1d:
+    path: data/cleaned/metric_btc.realized_price_-_utxo_age_bands@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.short_liquidations_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_btc.short_liquidations_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.short_liquidations_usd_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_btc.short_liquidations_usd_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.sopr_ratio_lth-sopr_sth-sopr@1d:
+    path: data/cleaned/metric_btc.sopr_ratio_lth-sopr_sth-sopr@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spent_output_age_bands_%@1d:
+    path: data/cleaned/metric_btc.spent_output_age_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spent_output_age_bands@1d:
+    path: data/cleaned/metric_btc.spent_output_age_bands@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spent_output_age_bands_usd@1d:
+    path: data/cleaned/metric_btc.spent_output_age_bands_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spent_output_profit_ratio_sopr@1d:
+    path: data/cleaned/metric_btc.spent_output_profit_ratio_sopr@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spent_output_value_bands_%@1d:
+    path: data/cleaned/metric_btc.spent_output_value_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spent_output_value_bands@1d:
+    path: data/cleaned/metric_btc.spent_output_value_bands@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spent_output_value_bands_usd@1d:
+    path: data/cleaned/metric_btc.spent_output_value_bands_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.spot_taker_cvdcumulative_volume_delta_90-day@1d:
+    path: data/cleaned/metric_btc.spot_taker_cvdcumulative_volume_delta_90-day@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.stock-to-flow_ratio@1d:
+    path: data/cleaned/metric_btc.stock-to-flow_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.stock-to-flow_reversion@1d:
+    path: data/cleaned/metric_btc.stock-to-flow_reversion@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.sum_coin_age@1d:
+    path: data/cleaned/metric_btc.sum_coin_age@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.sum_coin_age_distribution_%@1d:
+    path: data/cleaned/metric_btc.sum_coin_age_distribution_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.sum_coin_age_distribution@1d:
+    path: data/cleaned/metric_btc.sum_coin_age_distribution@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.sum_coin_dollar_age@1d:
+    path: data/cleaned/metric_btc.sum_coin_dollar_age@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.supply_adjusted_dormancy@1d:
+    path: data/cleaned/metric_btc.supply_adjusted_dormancy@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.supply_in_loss_%@1d:
+    path: data/cleaned/metric_btc.supply_in_loss_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.supply_in_profit_%@1d:
+    path: data/cleaned/metric_btc.supply_in_profit_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.supply-adjusted_cdd@1d:
+    path: data/cleaned/metric_btc.supply-adjusted_cdd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.taker_buy_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.taker_buy_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.taker_buy_sell_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.taker_buy_sell_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.taker_buy_volume_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.taker_buy_volume_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.taker_sell_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.taker_sell_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.taker_sell_volume_-_all_exchanges@1d:
+    path: data/cleaned/metric_btc.taker_sell_volume_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.thermo_cap@1d:
+    path: data/cleaned/metric_btc.thermo_cap@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.tokens_transferred__mean@1d:
+    path: data/cleaned/metric_btc.tokens_transferred__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.tokens_transferred__median@1d:
+    path: data/cleaned/metric_btc.tokens_transferred__median@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.tokens_transferred__total@1d:
+    path: data/cleaned/metric_btc.tokens_transferred__total@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.total_supply@1d:
+    path: data/cleaned/metric_btc.total_supply@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.trading_volume_kyc_vs_non-kyc@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Trading Volume (KYC VS. Non-KYC) -
+      Day.csv
+    tz: UTC
+    value_column: Value
+  btc.trading_volume_spot_vs_derivative@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Trading Volume (Spot VS. Derivative)
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.trading_volume_ratio_kyc_vs_non-kyc@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Trading Volume Ratio (KYC VS. Non-KYC)
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.trading_volume_ratio_spot_vs_derivative@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Trading Volume Ratio (Spot VS. Derivative)
+      - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.transaction_count__mean@1d:
+    path: data/cleaned/metric_btc.transaction_count__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.transaction_count__total@1d:
+    path: data/cleaned/metric_btc.transaction_count__total@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.us_to_the_rest_reserve_ratio@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin U.S. to The Rest Reserve Ratio - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_age_bands_%@1d:
+    path: data/cleaned/metric_btc.utxo_age_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_age_bands@1d:
+    path: data/cleaned/metric_btc.utxo_age_bands@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_age_bands_usd@1d:
+    path: data/cleaned/metric_btc.utxo_age_bands_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_count_-_age_bands_%@1d:
+    path: data/cleaned/metric_btc.utxo_count_-_age_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_count_-_age_bands@1d:
+    path: data/cleaned/metric_btc.utxo_count_-_age_bands@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_count_-_value_bands_%@1d:
+    path: data/cleaned/metric_btc.utxo_count_-_value_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_count_-_value_bands@1d:
+    path: data/cleaned/metric_btc.utxo_count_-_value_bands@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_value_bands_%@1d:
+    path: data/cleaned/metric_btc.utxo_value_bands_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxo_value_bands@1d:
+    path: data/cleaned/metric_btc.utxo_value_bands@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxos_in_loss_%@1d:
+    path: data/cleaned/metric_btc.utxos_in_loss_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxos_in_loss@1d:
+    path: data/cleaned/metric_btc.utxos_in_loss@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxos_in_profit_%@1d:
+    path: data/cleaned/metric_btc.utxos_in_profit_%@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.utxos_in_profit@1d:
+    path: data/cleaned/metric_btc.utxos_in_profit@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.active_addresses_-_internal_external_eoa@1d:
+    path: data/cleaned/metric_eth.active_addresses_-_internal_external_eoa@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.active_receiving_addresses_-_internal_external_eoa@1d:
+    path: data/cleaned/metric_eth.active_receiving_addresses_-_internal_external_eoa@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.active_sending_addresses_-_internal_external_eoa@1d:
+    path: data/cleaned/metric_eth.active_sending_addresses_-_internal_external_eoa@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.base_fee_per_gas__mean@1d:
+    path: data/cleaned/metric_eth.base_fee_per_gas__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.block_interval__mean@1d:
+    path: data/cleaned/metric_eth.block_interval__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.block_rewards_except_uncle_blocks@1d:
+    path: data/cleaned/metric_eth.block_rewards_except_uncle_blocks@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.block_rewards_usd_except_uncle_blocks@1d:
+    path: data/cleaned/metric_eth.block_rewards_usd_except_uncle_blocks@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.block_size__mean@1d:
+    path: data/cleaned/metric_eth.block_size__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.blocks_mined@1d:
+    path: data/cleaned/metric_eth.blocks_mined@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.coinbase_premium_gap@1d:
+    path: data/cleaned/metric_eth.coinbase_premium_gap@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.coinbase_premium_index@1d:
+    path: data/cleaned/metric_eth.coinbase_premium_index@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.destroyed_contracts@1d:
+    path: data/cleaned/metric_eth.destroyed_contracts@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.difficulty@1d:
+    path: data/cleaned/metric_eth.difficulty@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.estimated_leverage_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.estimated_leverage_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_depositing_addresses_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_depositing_addresses_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_depositing_transactions_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_depositing_transactions_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_inflow__mean_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_inflow__mean_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_inflow_mean_ma7_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_inflow_mean_ma7_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_inflow_top10_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_inflow_top10_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_inflow__total_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_inflow__total_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_netflow__total_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_netflow__total_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_outflow__mean_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_outflow__mean_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_outflow_mean_ma7_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_outflow_mean_ma7_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_outflow_top10_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_outflow_top10_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_outflow__total_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_outflow__total_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_reserve_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_reserve_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_reserve_usd_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_reserve_usd_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_supply_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_supply_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_withdrawing_addresses_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_withdrawing_addresses_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.exchange_withdrawing_transactions_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.exchange_withdrawing_transactions_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees__total@1d:
+    path: data/cleaned/metric_eth.fees__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_burnt__total@1d:
+    path: data/cleaned/metric_eth.fees_burnt__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_burnt_per_transaction__mean@1d:
+    path: data/cleaned/metric_eth.fees_burnt_per_transaction__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_burnt_per_transaction__median@1d:
+    path: data/cleaned/metric_eth.fees_burnt_per_transaction__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_burnt_per_transaction_usd__mean@1d:
+    path: data/cleaned/metric_eth.fees_burnt_per_transaction_usd__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_burnt_per_transaction_usd__median@1d:
+    path: data/cleaned/metric_eth.fees_burnt_per_transaction_usd__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_burnt_usd__total@1d:
+    path: data/cleaned/metric_eth.fees_burnt_usd__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_per_block__mean@1d:
+    path: data/cleaned/metric_eth.fees_per_block__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_per_block_usd__mean@1d:
+    path: data/cleaned/metric_eth.fees_per_block_usd__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_per_transaction__mean@1d:
+    path: data/cleaned/metric_eth.fees_per_transaction__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_per_transaction__median@1d:
+    path: data/cleaned/metric_eth.fees_per_transaction__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_per_transaction_usd__mean@1d:
+    path: data/cleaned/metric_eth.fees_per_transaction_usd__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_per_transaction_usd__median@1d:
+    path: data/cleaned/metric_eth.fees_per_transaction_usd__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_to_reward_ratio@1d:
+    path: data/cleaned/metric_eth.fees_to_reward_ratio@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fees_usd__total@1d:
+    path: data/cleaned/metric_eth.fees_usd__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fund_holdings_-_ethe@1d:
+    path: data/cleaned/metric_eth.fund_holdings_-_ethe@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fund_market_premium_-_ethe@1d:
+    path: data/cleaned/metric_eth.fund_market_premium_-_ethe@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fund_price__usd_-_ethe@1d:
+    path: data/cleaned/metric_eth.fund_price__usd_-_ethe@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.fund_volume_-_ethe@1d:
+    path: data/cleaned/metric_eth.fund_volume_-_ethe@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.funding_rates_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.funding_rates_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.futures_taker_cvdcumulative_volume_delta_90-day@1d:
+    path: data/cleaned/metric_eth.futures_taker_cvdcumulative_volume_delta_90-day@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.gas_limit__mean@1d:
+    path: data/cleaned/metric_eth.gas_limit__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.gas_price__mean@1d:
+    path: data/cleaned/metric_eth.gas_price__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.gas_used__mean@1d:
+    path: data/cleaned/metric_eth.gas_used__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.gas_used__total@1d:
+    path: data/cleaned/metric_eth.gas_used__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.korea_premium_index@1d:
+    path: data/cleaned/metric_eth.korea_premium_index@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.long_liquidations_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_eth.long_liquidations_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.long_liquidations_usd_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_eth.long_liquidations_usd_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.max_fee_per_gas__mean@1d:
+    path: data/cleaned/metric_eth.max_fee_per_gas__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.max_priority_fee_per_gas__mean@1d:
+    path: data/cleaned/metric_eth.max_priority_fee_per_gas__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.new_contracts@1d:
+    path: data/cleaned/metric_eth.new_contracts@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.new_supply@1d:
+    path: data/cleaned/metric_eth.new_supply@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.number_of_contracts@1d:
+    path: data/cleaned/metric_eth.number_of_contracts@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.open_interest_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_eth.open_interest_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.price_volume_-_spot_all_exchanges_eth-usd@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Price & Volume - Spot, All Exchanges,
+      ETH-USD - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.price_volume_krw_-_spot@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Ethereum Price & Volume KRW - Spot - Day.csv
+    tz: UTC
+    value_column: Value
+  eth.priority_fees__total@1d:
+    path: data/cleaned/metric_eth.priority_fees__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.priority_fees_per_transaction__mean@1d:
+    path: data/cleaned/metric_eth.priority_fees_per_transaction__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.priority_fees_per_transaction__median@1d:
+    path: data/cleaned/metric_eth.priority_fees_per_transaction__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.priority_fees_per_transaction_usd__mean@1d:
+    path: data/cleaned/metric_eth.priority_fees_per_transaction_usd__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.priority_fees_per_transaction_usd__median@1d:
+    path: data/cleaned/metric_eth.priority_fees_per_transaction_usd__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.priority_fees_usd__total@1d:
+    path: data/cleaned/metric_eth.priority_fees_usd__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.short_liquidations_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_eth.short_liquidations_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.short_liquidations_usd_-_all_exchanges_all_symbol@1d:
+    path: data/cleaned/metric_eth.short_liquidations_usd_-_all_exchanges_all_symbol@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.spot_taker_cvdcumulative_volume_delta_90-day@1d:
+    path: data/cleaned/metric_eth.spot_taker_cvdcumulative_volume_delta_90-day@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.taker_buy_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.taker_buy_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.taker_buy_sell_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.taker_buy_sell_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.taker_buy_volume_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.taker_buy_volume_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.taker_sell_ratio_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.taker_sell_ratio_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.taker_sell_volume_-_all_exchanges@1d:
+    path: data/cleaned/metric_eth.taker_sell_volume_-_all_exchanges@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.tokens_transferred__mean@1d:
+    path: data/cleaned/metric_eth.tokens_transferred__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.tokens_transferred__median@1d:
+    path: data/cleaned/metric_eth.tokens_transferred__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.tokens_transferred__total@1d:
+    path: data/cleaned/metric_eth.tokens_transferred__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.tokens_transferred_usd__mean@1d:
+    path: data/cleaned/metric_eth.tokens_transferred_usd__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.tokens_transferred_usd__median@1d:
+    path: data/cleaned/metric_eth.tokens_transferred_usd__median@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.tokens_transferred_usd__total@1d:
+    path: data/cleaned/metric_eth.tokens_transferred_usd__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transaction_count__mean@1d:
+    path: data/cleaned/metric_eth.transaction_count__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transaction_count__total@1d:
+    path: data/cleaned/metric_eth.transaction_count__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transaction_count_-_internal_external_eoa__mean@1d:
+    path: data/cleaned/metric_eth.transaction_count_-_internal_external_eoa__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transaction_count_-_internal_external_eoa__total@1d:
+    path: data/cleaned/metric_eth.transaction_count_-_internal_external_eoa__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transactions_between_eoa__mean@1d:
+    path: data/cleaned/metric_eth.transactions_between_eoa__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transactions_between_eoa__total@1d:
+    path: data/cleaned/metric_eth.transactions_between_eoa__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transfer_count__mean@1d:
+    path: data/cleaned/metric_eth.transfer_count__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transfer_count__total@1d:
+    path: data/cleaned/metric_eth.transfer_count__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transfer_count_-_internal_external_eoa__mean@1d:
+    path: data/cleaned/metric_eth.transfer_count_-_internal_external_eoa__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transfer_count_-_internal_external_eoa__total@1d:
+    path: data/cleaned/metric_eth.transfer_count_-_internal_external_eoa__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transfers_between_eoa__mean@1d:
+    path: data/cleaned/metric_eth.transfers_between_eoa__mean@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.transfers_between_eoa__total@1d:
+    path: data/cleaned/metric_eth.transfers_between_eoa__total@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.uncle_block_rewards@1d:
+    path: data/cleaned/metric_eth.uncle_block_rewards@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.uncle_block_rewards_usd@1d:
+    path: data/cleaned/metric_eth.uncle_block_rewards_usd@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.uncle_blocks_mined@1d:
+    path: data/cleaned/metric_eth.uncle_blocks_mined@1d.csv
+    tz: UTC
+    value_column: Value
+  eth.velocity@1d:
+    path: data/cleaned/metric_eth.velocity@1d.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_to_miner_total@1d:
+    path: C:/Users/Gladiator/MyDataCSVs/Bitcoin Exchange to Miner Flow (Total) - All
+      Exchanges, All Miners - Day.csv
+    tz: UTC
+    value_column: Value
+  btc.exchange_reserve_ratio_kyc_vs._non-kyc@1d:
+    path: data/cleaned/metric_btc.exchange_reserve_ratio_kyc_vs._non-kyc@1d.csv
+    tz: UTC
+  btc.exchange_reserve_ratio_u.s._vs._off-shore@1d:
+    path: data/cleaned/metric_btc.exchange_reserve_ratio_u.s._vs._off-shore@1d.csv
+    tz: UTC
+  btc.exchange_token_transferred_ratio_kyc_vs._non-kyc@1d:
+    path: data/cleaned/metric_btc.exchange_token_transferred_ratio_kyc_vs._non-kyc@1d.csv
+    tz: UTC
+  btc.exchange_token_transferred_ratio_us_vs._off-shore@1d:
+    path: data/cleaned/metric_btc.exchange_token_transferred_ratio_us_vs._off-shore@1d.csv
+    tz: UTC
+  btc.trading_volume_kyc_vs._non-kyc@1d:
+    path: data/cleaned/metric_btc.trading_volume_kyc_vs._non-kyc@1d.csv
+    tz: UTC
+  btc.trading_volume_spot_vs._derivative@1d:
+    path: data/cleaned/metric_btc.trading_volume_spot_vs._derivative@1d.csv
+    tz: UTC
+  btc.trading_volume_ratio_kyc_vs._non-kyc@1d:
+    path: data/cleaned/metric_btc.trading_volume_ratio_kyc_vs._non-kyc@1d.csv
+    tz: UTC
+  btc.trading_volume_ratio_spot_vs._derivative@1d:
+    path: data/cleaned/metric_btc.trading_volume_ratio_spot_vs._derivative@1d.csv
+    tz: UTC
+  btc.u.s._to_the_rest_reserve_ratio@1d:
+    path: data/cleaned/metric_btc.u.s._to_the_rest_reserve_ratio@1d.csv
+    tz: UTC
+  btc.price_volume_spot_all_exchanges_usd@1d:
+    path: "C:/Users/Gladiator/MyDataCSVs/Bitcoin Price & Volume - Spot, All Exchanges, BTC-USD - Day.csv"
+    tz: UTC
+    value_column: Value
+
+  btc.price_volume_krw@1d:
+    path: "C:/Users/Gladiator/MyDataCSVs/Bitcoin Price & Volume KRW - Spot - Day.csv"
+    tz: UTC
+    value_column: Value
+
+  eth.price_volume_krw@1d:
+    path: "C:/Users/Gladiator/MyDataCSVs/Ethereum Price & Volume KRW - Spot - Day.csv"
+    tz: UTC
+    value_column: Value
+

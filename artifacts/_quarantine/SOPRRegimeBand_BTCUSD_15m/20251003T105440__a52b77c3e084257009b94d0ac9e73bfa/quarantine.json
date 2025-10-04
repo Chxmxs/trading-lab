@@ -1,0 +1,32 @@
+{
+  "exception_message": "run_one_core(context) needs either context['job_callable'] (callable) OR context['strategy_obj'] with .run(df, run_config).",
+  "exception_type": "RuntimeError",
+  "job": {
+    "params": {
+      "band_high": 1.0286876795507347,
+      "band_low": 0.9771348975482185,
+      "band_pad": 0.0023487451748115174,
+      "ma_regime": 85,
+      "ma_short": 7,
+      "max_hold_days": 150,
+      "regime_eps": 0.008432372140447618,
+      "sl_pct": 0.051618547024402876,
+      "sopr_tp_bear": 0.9618568403288235,
+      "sopr_tp_bull": 1.0765558646690403,
+      "tp_pct": 0.07599325057570998
+    },
+    "strategy": "SOPRRegimeBand",
+    "symbol": "BTCUSD",
+    "timeframe": "15m"
+  },
+  "key": "SOPRRegimeBand_BTCUSD_15m",
+  "paths": {
+    "artifact_dir": "artifacts\\_boot\\SOPRRegimeBand_BTCUSD_15m\\20251003T105440__a52b77c3e084257009b94d0ac9e73bfa",
+    "cv_dir": null,
+    "quarantine_dir": "artifacts\\_quarantine\\SOPRRegimeBand_BTCUSD_15m\\20251003T105440__a52b77c3e084257009b94d0ac9e73bfa"
+  },
+  "reason": "persistent",
+  "timestamps": {
+    "utc": "2025-10-03T10:54:40Z"
+  }
+}

@@ -1,0 +1,2 @@
+[TRIAL 5] final=-inf raw=0.000000 penalty=0.000000
+[CONSTRAINT] min_trades oos_trades=0 < 5

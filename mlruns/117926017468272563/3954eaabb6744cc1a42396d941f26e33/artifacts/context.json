@@ -1,0 +1,34 @@
+{
+  "strategy": "HammerStarReversal",
+  "symbol": "BTCUSD",
+  "timeframe": "1d",
+  "params": {
+    "lookback": 4,
+    "wick_ratio": 2.9408571676918993,
+    "max_opp_wick_body": 0.3793972738151323,
+    "min_body_frac_range": 0.16170486652334806,
+    "max_hold": 2,
+    "allow_flip": true
+  },
+  "run_config": {
+    "start": "2015-01-01",
+    "end": "2025-03-23",
+    "oos_start": "2022-01-01",
+    "oos_end": "2024-12-31",
+    "fees_bps": 5,
+    "slippage_bps": 2,
+    "inputs": {
+      "price_csv": "data/cleaned/ohlcv_BTCUSD@1d.csv"
+    },
+    "params": {
+      "lookback": 4,
+      "wick_ratio": 2.9408571676918993,
+      "max_opp_wick_body": 0.3793972738151323,
+      "min_body_frac_range": 0.16170486652334806,
+      "max_hold": 2,
+      "allow_flip": true
+    }
+  },
+  "timestamp": "2025-10-03T13:06:36.478270+00:00",
+  "paramhash": "4114fc5ade59"
+}

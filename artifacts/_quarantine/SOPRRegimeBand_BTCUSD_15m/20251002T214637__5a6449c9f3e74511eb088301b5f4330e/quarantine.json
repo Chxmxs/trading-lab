@@ -1,0 +1,31 @@
+{
+  "exception_message": "Already tz-aware, use tz_convert to convert.",
+  "exception_type": "TypeError",
+  "job": {
+    "params": {
+      "band_high": 1.0136892797384502,
+      "band_low": 0.9972268565508196,
+      "ma_regime": 100,
+      "ma_short": 9,
+      "max_hold_days": 110,
+      "regime_eps": 0.00583632411671852,
+      "sl_pct": 0.06550839440458121,
+      "sopr_tp_bear": 0.9515512399438542,
+      "sopr_tp_bull": 1.0306011851347616,
+      "tp_pct": 0.0530365317172126
+    },
+    "strategy": "SOPRRegimeBand",
+    "symbol": "BTCUSD",
+    "timeframe": "15m"
+  },
+  "key": "SOPRRegimeBand_BTCUSD_15m",
+  "paths": {
+    "artifact_dir": "artifacts\\_boot\\SOPRRegimeBand_BTCUSD_15m\\20251002T214637__5a6449c9f3e74511eb088301b5f4330e",
+    "cv_dir": null,
+    "quarantine_dir": "artifacts\\_quarantine\\SOPRRegimeBand_BTCUSD_15m\\20251002T214637__5a6449c9f3e74511eb088301b5f4330e"
+  },
+  "reason": "persistent",
+  "timestamps": {
+    "utc": "2025-10-02T21:46:38Z"
+  }
+}

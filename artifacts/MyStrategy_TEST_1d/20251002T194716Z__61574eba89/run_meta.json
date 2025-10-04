@@ -1,0 +1,19 @@
+{
+  "key": "MyStrategy_TEST_1d",
+  "artifact_dir": "C:\\Users\\Gladiator\\trading-lab\\artifacts\\MyStrategy_TEST_1d\\20251002T194716Z__61574eba89",
+  "cv_dir": null,
+  "metrics": {
+    "CAGR": 0.0,
+    "win_rate": null,
+    "payoff_ratio": null,
+    "profit_factor": null,
+    "max_drawdown": 0.0,
+    "MAR": null,
+    "Sharpe": null,
+    "Sortino": null,
+    "exposure": null,
+    "trade_count": 0,
+    "avg_trade": null,
+    "avg_trade_pct": null
+  }
+}
