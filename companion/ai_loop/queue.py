@@ -6,7 +6,7 @@ from typing import Any, Optional, Deque, List
 __all__ = ["JobQueue", "push", "pop", "peek", "size", "clear"]
 
 class JobQueue:
-    """A minimal JSONL-backed FIFO queue for tests."""
+    """A minimal JSONL-backed FIFO/priority queue for tests."""
     def __init__(self, path: str):
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -28,23 +28,44 @@ class JobQueue:
                 f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
     def add_job(self, job: Any) -> None:
-        """Alias used in tests; appends a job dict to the JSONL queue."""
+        """Append a job dict to the JSONL queue."""
         self._q.append(job)
         with self.path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(job, ensure_ascii=False) + "\n")
 
     def list_jobs(self) -> List[Any]:
-        """Return jobs as a list, sorted by 'priority' ascending when present."""
+        """Return jobs sorted by 'priority' ASC (1 beats 5)."""
         items = list(self._q)
         try:
             return sorted(items, key=lambda x: x.get("priority", 0))
         except Exception:
-            return items  # if not dicts, return insertion order
+            return items
 
+    def pop_job(self) -> Optional[Any]:
+        """Remove and return the highest-priority job (smallest 'priority')."""
+        if not self._q:
+            return None
+        # Find index of min-priority item
+        items = list(self._q)
+        try:
+            idx_min = min(range(len(items)), key=lambda i: items[i].get("priority", 0))
+        except Exception:
+            # Fallback: FIFO
+            item = self._q.popleft()
+            self._persist_all()
+            return item
+        # Remove by index (deque has no pop(index)), rebuild
+        item = items.pop(idx_min)
+        self._q = deque(items)
+        self._persist_all()
+        return item
+
+    # Back-compat helpers
     def push(self, item: Any) -> None:
         self.add_job(item)
 
     def pop(self) -> Optional[Any]:
+        """FIFO pop (unused by tests but kept)."""
         if not self._q:
             return None
         item = self._q.popleft()
