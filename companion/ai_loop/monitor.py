@@ -1,17 +1,15 @@
 ﻿from typing import Literal
 
-Category = Literal["data", "config", "transient", "env", "import", "constraint", "unknown"]
+Category = Literal["data", "config", "transient", "env", "import", "constraint", "schema", "unknown"]
 
 def classify_error(message: str) -> Category:
-    """Classify an error message into coarse categories used by the AI loop.
-    Heuristics match our test expectations.
-    """
+    """Classify an error message into coarse categories used by the AI loop."""
     if not isinstance(message, str):
         return "unknown"
 
     m = message.lower()
 
-    # --- import issues (test expects 'import') ---
+    # --- import issues ---
     if (
         "importerror" in m
         or "no module named" in m
@@ -20,7 +18,7 @@ def classify_error(message: str) -> Category:
     ):
         return "import"
 
-    # --- data issues: missing columns/files, bad JSON/CSV, encoding/BOM ---
+    # --- data issues ---
     if (
         "keyerror" in m
         or "missing column" in m
@@ -35,6 +33,16 @@ def classify_error(message: str) -> Category:
     ):
         return "data"
 
+    # --- schema / shape issues ---
+    if (
+        "wrong shape" in m
+        or "shape mismatch" in m
+        or "reshape" in m
+        or "dimensions" in m
+        or ("valueerror" in m and "shape" in m)
+    ):
+        return "schema"
+
     # --- config mistakes ---
     if (
         "unknown strategy" in m
@@ -46,7 +54,7 @@ def classify_error(message: str) -> Category:
     ):
         return "config"
 
-    # --- transient: network, timeouts, flaky IO ---
+    # --- transient: network/timeouts ---
     if (
         "timeout" in m
         or "timed out" in m
@@ -59,7 +67,7 @@ def classify_error(message: str) -> Category:
     ):
         return "transient"
 
-    # --- environment: permissions, mlflow uri, dll issues ---
+    # --- environment ---
     if (
         "permission" in m
         or "access denied" in m
@@ -68,7 +76,7 @@ def classify_error(message: str) -> Category:
     ):
         return "env"
 
-    # --- constraints: min trades etc. ---
+    # --- constraints ---
     if (
         "min_trades" in m
         or "minimum trades" in m

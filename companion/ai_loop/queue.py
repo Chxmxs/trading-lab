@@ -1,7 +1,7 @@
 ﻿import json
 from pathlib import Path
 from collections import deque
-from typing import Any, Optional, Deque, Iterable
+from typing import Any, Optional, Deque
 
 __all__ = ["JobQueue", "push", "pop", "peek", "size", "clear"]
 
@@ -20,7 +20,6 @@ class JobQueue:
                     try:
                         self._q.append(json.loads(line))
                     except Exception:
-                        # tolerate malformed lines in tests
                         pass
 
     def _persist_all(self) -> None:
@@ -28,10 +27,14 @@ class JobQueue:
             for item in self._q:
                 f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
-    def push(self, item: Any) -> None:
-        self._q.append(item)
+    def add_job(self, job: Any) -> None:
+        """Alias used in tests; appends a job dict to the JSONL queue."""
+        self._q.append(job)
         with self.path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(item, ensure_ascii=False) + "\n")
+            f.write(json.dumps(job, ensure_ascii=False) + "\n")
+
+    def push(self, item: Any) -> None:
+        self.add_job(item)
 
     def pop(self) -> Optional[Any]:
         if not self._q:
@@ -50,7 +53,7 @@ class JobQueue:
         self._q.clear()
         self._persist_all()
 
-# Convenience module-level helpers (operate on a temp in-memory queue)
+# In-memory helper queue
 _tmp_q: Deque[Any] = deque()
 
 def push(item: Any) -> None:
