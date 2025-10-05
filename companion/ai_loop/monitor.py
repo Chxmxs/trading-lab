@@ -3,9 +3,9 @@
 Category = Literal["data", "config", "transient", "env", "constraint", "unknown"]
 
 def classify_error(message: str) -> Category:
-    \"\"\"Classify an error message into coarse categories used by the AI loop.
+    """Classify an error message into coarse categories used by the AI loop.
     Heuristics are intentionally simple so tests remain stable.
-    \"\"\"
+    """
     if not isinstance(message, str):
         return "unknown"
 
@@ -31,9 +31,9 @@ def classify_error(message: str) -> Category:
         "unknown strategy" in m
         or "invalid parameter" in m
         or "invalid config" in m
-        or "yaml" in m and "parse" in m
-        or "json" in m and "parse" in m
-        or "typeerror" in m and "unexpected keyword argument" in m
+        or ("yaml" in m and "parse" in m)
+        or ("json" in m and "parse" in m)
+        or ("typeerror" in m and "unexpected keyword argument" in m)
     ):
         return "config"
 
@@ -54,7 +54,7 @@ def classify_error(message: str) -> Category:
     if (
         "permission" in m
         or "access denied" in m
-        or "mlflow" in m and ("uri" in m or "tracking" in m)
+        or ("mlflow" in m and ("uri" in m or "tracking" in m))
         or "module not found" in m
         or "importerror" in m
         or "dll load failed" in m
@@ -66,7 +66,7 @@ def classify_error(message: str) -> Category:
     if (
         "min_trades" in m
         or "minimum trades" in m
-        or "constraint" in m and ("violation" in m or "failed" in m)
+        or ("constraint" in m and ("violation" in m or "failed" in m))
     ):
         return "constraint"
 
