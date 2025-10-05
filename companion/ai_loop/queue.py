@@ -1,7 +1,7 @@
 ﻿import json
 from pathlib import Path
 from collections import deque
-from typing import Any, Optional, Deque
+from typing import Any, Optional, Deque, List
 
 __all__ = ["JobQueue", "push", "pop", "peek", "size", "clear"]
 
@@ -32,6 +32,14 @@ class JobQueue:
         self._q.append(job)
         with self.path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(job, ensure_ascii=False) + "\n")
+
+    def list_jobs(self) -> List[Any]:
+        """Return jobs as a list, sorted by 'priority' ascending when present."""
+        items = list(self._q)
+        try:
+            return sorted(items, key=lambda x: x.get("priority", 0))
+        except Exception:
+            return items  # if not dicts, return insertion order
 
     def push(self, item: Any) -> None:
         self.add_job(item)

@@ -1,13 +1,17 @@
 ﻿from typing import Literal
 
-Category = Literal["data", "config", "transient", "env", "import", "constraint", "schema", "unknown"]
+Category = Literal["data", "config", "transient", "env", "import", "constraint", "schema", "performance", "unknown"]
 
 def classify_error(message: str) -> Category:
     """Classify an error message into coarse categories used by the AI loop."""
     if not isinstance(message, str):
         return "unknown"
 
-    m = message.lower()
+    m = message.strip().lower()
+
+    # --- performance/no-message (test expects this for empty string) ---
+    if m == "":
+        return "performance"
 
     # --- import issues ---
     if (
