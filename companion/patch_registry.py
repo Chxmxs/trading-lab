@@ -1,86 +1,65 @@
-﻿# -*- coding: utf-8 -*-
-"""
-patch_registry.py — centralized registry of safe auto-patch functions.
+﻿import logging
+from typing import Callable, List
+import pandas as pd
 
-Each patcher must live in companion/patchers/ and expose a callable:
-    def apply_patch(run_id: str, artifacts_dir: Path) -> bool
+log = logging.getLogger("companion.patch_registry")
 
-This module dynamically imports all .py files in companion/patchers/
-(except __init__.py) and collects any `apply_patch` functions it finds.
-"""
+# Global registry of patchers (callables df->df)
+_PATCHERS: List[Callable[[pd.DataFrame], pd.DataFrame]] = []
 
-import importlib
-import inspect
-from pathlib import Path
-from typing import Callable, Dict
+def register_patcher(func: Callable[[pd.DataFrame], pd.DataFrame]) -> Callable[[pd.DataFrame], pd.DataFrame]:
+    """Decorator to register a patcher in global order."""
+    _PATCHERS.append(func)
+    log.info("Registered patcher: %s", func.__name__)
+    return func
 
-from companion.logging_config import configure_logging
-
-log = configure_logging(__name__)
-
-PATCHERS_DIR = Path(__file__).parent / "patchers"
-
-def get_patchers() -> Dict[str, Callable]:
-    """Discover and return available patchers."""
-    patchers = {}
-    if not PATCHERS_DIR.exists():
-        log.warning("Patchers directory not found: %s", PATCHERS_DIR)
-        return patchers
-
-    for file in PATCHERS_DIR.glob("*.py"):
-        if file.name.startswith("__"):
-            continue
-        mod_name = f"companion.patchers.{file.stem}"
+def apply_all_patches(df: pd.DataFrame) -> pd.DataFrame:
+    """Apply all registered patchers in order. Return the patched DataFrame."""
+    out = df.copy()
+    for func in list(_PATCHERS):
         try:
-            mod = importlib.import_module(mod_name)
-            for name, obj in inspect.getmembers(mod):
-                if callable(obj) and name == "apply_patch":
-                    patchers[file.stem] = obj
-                    log.info("Registered patcher: %s", file.stem)
+            out = func(out)
         except Exception as e:
-            log.error("Failed to import patcher %s: %s", mod_name, e)
+            log.error("apply_all_patches: %s failed -> %s", func.__name__, e)
+    return out
 
-    if not patchers:
-        log.warning("No patchers found in %s", PATCHERS_DIR)
-    return patchers
+@register_patcher
+def ohlc_patch(df: pd.DataFrame) -> pd.DataFrame:
+    """Ensure expected OHLC columns casing and presence; pass-through if already OK."""
+    out = df.copy()
+    # Normalize common alias casing (no truthiness on DataFrame!)
+    cols = {c.lower(): c for c in out.columns}
+    # If columns already include open/close, do nothing
+    expected = ["open", "close"]
+    if all(name in cols for name in expected):
+        return out
+    # Sometimes files use 'Open','Close' capitalization — just rename
+    rename_map = {}
+    if "open" not in cols and "Open" in out.columns:
+        rename_map["Open"] = "open"
+    if "close" not in cols and "Close" in out.columns:
+        rename_map["Close"] = "close"
+    if rename_map:
+        out = out.rename(columns=rename_map)
+    return out
 
-if __name__ == "__main__":
-    p = get_patchers()
-    print("Discovered patchers:", list(p.keys()))
-# --- Legacy compatibility ----------------------------------------------------
-def apply_all_patches(run_id: str = None, artifacts_dir=None) -> dict:
-    """
-    Compatibility wrapper for older modules expecting apply_all_patches().
-    It simply discovers and runs all registered patchers sequentially.
+@register_patcher
+def timestamp_patch(df: pd.DataFrame) -> pd.DataFrame:
+    """Create UTC DatetimeIndex from common timestamp columns; drop the column after."""
+    out = df.copy()
 
-    Args:
-        run_id: optional MLflow run id (for logging)
-        artifacts_dir: optional path (default: artifacts/_quarantine/<run_id>)
-    Returns:
-        dict: summary { "applied": [...], "errors": [...] }
-    """
-    from pathlib import Path
-    from companion.logging_config import configure_logging
-    log = configure_logging(__name__)
-    result = {"applied": [], "errors": []}
-    try:
-        patchers = get_patchers()
-        if not patchers:
-            log.warning("No patchers registered.")
-            return result
-        for name, func in patchers.items():
-            try:
-                ok = func(run_id=run_id or "manual", artifacts_dir=artifacts_dir or Path("artifacts/_quarantine"))
-                if ok:
-                    result["applied"].append(name)
-                    log.info("apply_all_patches: applied %s", name)
-                else:
-                    result["errors"].append(f"{name}: returned False")
-            except Exception as e:
-                result["errors"].append(f"{name}: {e}")
-                log.error("apply_all_patches: %s failed -> %s", name, e)
-    except Exception as e:
-        result["errors"].append(str(e))
-        log.error("apply_all_patches error: %s", e)
-    return result
-# ----------------------------------------------------------------------------- 
+    timestamp_col = None
+    for cand in ["timestamp", "Timestamp", "date", "Date", "datetime", "Datetime"]:
+        if cand in out.columns:
+            timestamp_col = cand
+            break
+
+    if timestamp_col is None:
+        # nothing to do
+        return out
+
+    ts = pd.to_datetime(out[timestamp_col], utc=True, errors="coerce")
+    out = out.drop(columns=[timestamp_col])
+    out.index = ts
+    out.index.name = "timestamp"
+    return out

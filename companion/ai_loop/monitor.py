@@ -1,15 +1,24 @@
 ﻿from typing import Literal
 
-Category = Literal["data", "config", "transient", "env", "constraint", "unknown"]
+Category = Literal["data", "config", "transient", "env", "import", "constraint", "unknown"]
 
 def classify_error(message: str) -> Category:
     """Classify an error message into coarse categories used by the AI loop.
-    Heuristics are intentionally simple so tests remain stable.
+    Heuristics match our test expectations.
     """
     if not isinstance(message, str):
         return "unknown"
 
     m = message.lower()
+
+    # --- import issues (test expects 'import') ---
+    if (
+        "importerror" in m
+        or "no module named" in m
+        or "no module" in m
+        or "module not found" in m
+    ):
+        return "import"
 
     # --- data issues: missing columns/files, bad JSON/CSV, encoding/BOM ---
     if (
@@ -26,7 +35,7 @@ def classify_error(message: str) -> Category:
     ):
         return "data"
 
-    # --- config mistakes: bad params, unknown strategy, invalid setting ---
+    # --- config mistakes ---
     if (
         "unknown strategy" in m
         or "invalid parameter" in m
@@ -37,7 +46,7 @@ def classify_error(message: str) -> Category:
     ):
         return "config"
 
-    # --- transient: network, timeouts, rate limits, flaky io ---
+    # --- transient: network, timeouts, flaky IO ---
     if (
         "timeout" in m
         or "timed out" in m
@@ -50,19 +59,16 @@ def classify_error(message: str) -> Category:
     ):
         return "transient"
 
-    # --- environment: permissions, paths, mlflow uri, import errors of deps ---
+    # --- environment: permissions, mlflow uri, dll issues ---
     if (
         "permission" in m
         or "access denied" in m
         or ("mlflow" in m and ("uri" in m or "tracking" in m))
-        or "module not found" in m
-        or "importerror" in m
         or "dll load failed" in m
-        or "no module named" in m
     ):
         return "env"
 
-    # --- constraints: min trades, validation failures specific to tuning ---
+    # --- constraints: min trades etc. ---
     if (
         "min_trades" in m
         or "minimum trades" in m
