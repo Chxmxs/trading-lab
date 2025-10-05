@@ -1,0 +1,48 @@
+[2025-10-05 19:04:44] INFO __main__ - Logging self-test OK.
+[2025-10-05 19:07:12] INFO __main__ - Applying patches for run_id=2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:09:13] ERROR companion.patch_registry - Failed to import patcher companion.patchers.example_patch: unexpected character after line continuation character (example_patch.py, line 2)
+[2025-10-05 19:09:14] WARNING companion.patch_registry - No patchers found in C:\Users\Gladiator\trading-lab\companion\patchers
+[2025-10-05 19:11:01] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 19:11:01] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 19:11:18] INFO __main__ - Applying patches for run_id=2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:11:18] INFO companion.ai_loop.patch_apply - Loading MLflow run 2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:11:18] INFO companion.ai_loop.patch_apply - Run status=FAILED, tags=10
+[2025-10-05 19:11:18] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 19:11:18] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 19:11:18] INFO companion.ai_loop.patch_apply - [dry-run] Would apply patch: ohlc_patch
+[2025-10-05 19:11:18] INFO companion.ai_loop.patch_apply - [dry-run] Would apply patch: timestamp_patch
+[2025-10-05 19:11:29] INFO __main__ - Applying patches for run_id=2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:11:29] INFO companion.ai_loop.patch_apply - Loading MLflow run 2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:11:29] INFO companion.ai_loop.patch_apply - Run status=FAILED, tags=10
+[2025-10-05 19:11:29] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 19:11:29] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 19:11:29] INFO companion.ai_loop.patch_apply - Applying patch: ohlc_patch
+[2025-10-05 19:11:29] INFO companion.patchers.ohlc_patch - ohlc_patch applied for run_id=2d13c4c321704761b584fc4e01cc90c8 at artifacts\_quarantine\2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:11:29] INFO companion.ai_loop.patch_apply - Applying patch: timestamp_patch
+[2025-10-05 19:11:29] INFO companion.patchers.timestamp_patch - timestamp_patch applied for run_id=2d13c4c321704761b584fc4e01cc90c8 at artifacts\_quarantine\2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:14:19] INFO companion.ai_loop.queue - Queued run_id=2d13c4c321704761b584fc4e01cc90c8 priority=failed_first
+[2025-10-05 19:14:19] INFO companion.ai_loop.queue - Dequeued run_id=2d13c4c321704761b584fc4e01cc90c8 priority=failed_first
+[2025-10-05 19:14:19] INFO companion.ai_loop.queue - Queued run_id=2d13c4c321704761b584fc4e01cc90c8 priority=failed_first
+[2025-10-05 19:27:22] INFO __main__ - Applying patches for run_id=2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:27:22] INFO companion.ai_loop.patch_apply - Loading MLflow run 2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:27:22] INFO companion.ai_loop.patch_apply - Run status=FAILED, tags=10
+[2025-10-05 19:27:22] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 19:27:22] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 19:27:22] INFO companion.ai_loop.patch_apply - Applying patch: ohlc_patch
+[2025-10-05 19:27:22] INFO companion.patchers.ohlc_patch - ohlc_patch applied for run_id=2d13c4c321704761b584fc4e01cc90c8 at artifacts\_quarantine\2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:27:22] INFO companion.ai_loop.patch_apply - Applying patch: timestamp_patch
+[2025-10-05 19:27:22] INFO companion.patchers.timestamp_patch - timestamp_patch applied for run_id=2d13c4c321704761b584fc4e01cc90c8 at artifacts\_quarantine\2d13c4c321704761b584fc4e01cc90c8
+[2025-10-05 19:27:22] INFO companion.ai_loop.queue - Queue already contains run_id=2d13c4c321704761b584fc4e01cc90c8 priority=failed_first
+[2025-10-05 19:27:22] INFO __main__ - Auto-enqueued run_id=2d13c4c321704761b584fc4e01cc90c8 after patch
+[2025-10-05 19:41:49] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 19:41:49] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 19:41:49] INFO companion.patchers.ohlc_patch - ohlc_patch applied for run_id=test at artifacts\_quarantine
+[2025-10-05 19:41:49] INFO companion.patch_registry - apply_all_patches: applied ohlc_patch
+[2025-10-05 19:41:49] INFO companion.patchers.timestamp_patch - timestamp_patch applied for run_id=test at artifacts\_quarantine
+[2025-10-05 19:41:49] INFO companion.patch_registry - apply_all_patches: applied timestamp_patch
+[2025-10-05 19:41:54] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 19:41:54] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 19:41:54] INFO companion.patchers.ohlc_patch - ohlc_patch applied for run_id=test at artifacts\_quarantine
+[2025-10-05 19:41:54] INFO companion.patch_registry - apply_all_patches: applied ohlc_patch
+[2025-10-05 19:41:54] INFO companion.patchers.timestamp_patch - timestamp_patch applied for run_id=test at artifacts\_quarantine
+[2025-10-05 19:41:54] INFO companion.patch_registry - apply_all_patches: applied timestamp_patch

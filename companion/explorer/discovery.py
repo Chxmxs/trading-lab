@@ -495,3 +495,49 @@ def discover_strategies(config: Dict[str, Any]) -> List[StrategyCandidate]:
 
     return unique
 
+# ==== CONTEXT INTEGRATION (non-breaking append) =================================
+# These helpers load context built by context_builder.py and let you enrich LLM prompts.
+
+from .context_builder import build_data_map
+from pathlib import Path
+import json
+
+def build_prompt_context():
+    """
+    Returns a dict with keys:
+      - available_symbols: list[str]
+      - timeframes_by_symbol: dict[symbol -> list[tf]]
+      - metrics_by_symbol_tf: dict[(symbol, tf) -> list[str]]  (slugs)
+    """
+    dm = build_data_map()
+    available_symbols = sorted(dm.keys())
+    timeframes_by_symbol = {sym: sorted(dm[sym].keys()) for sym in dm}
+    metrics_by_symbol_tf = {}
+    for sym, tfd in dm.items():
+        for tf, sections in tfd.items():
+            metrics = sections.get("metrics", [])
+            metrics_by_symbol_tf[(sym, tf)] = sorted(metrics)
+    return {
+        "available_symbols": available_symbols,
+        "timeframes_by_symbol": timeframes_by_symbol,
+        "metrics_by_symbol_tf": {f"{k[0]}@{k[1]}": v for k, v in metrics_by_symbol_tf.items()},
+    }
+
+def enrich_prompt_with_context(base_prompt):
+    """
+    Appends a short, LLM-friendly context block to `base_prompt`.
+    """
+    ctx = build_prompt_context()
+    lines = []
+    lines.append("## DATA CONTEXT")
+    lines.append("Available Symbols: " + ", ".join(ctx["available_symbols"]))
+    lines.append("Timeframes:")
+    for sym, tfs in ctx["timeframes_by_symbol"].items():
+        lines.append(f"  - {sym}: {', '.join(tfs)}")
+    lines.append("Metrics by Symbol@TF:")
+    for key, slugs in ctx["metrics_by_symbol_tf"].items():
+        short = ", ".join(slugs[:8])
+        more = " (+more)" if len(slugs) > 8 else ""
+        lines.append(f"  - {key}: {short}{more}")
+    return base_prompt.rstrip() + "\n\n" + "\n".join(lines) + "\n"
+# ================================================================================

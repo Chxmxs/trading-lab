@@ -5,7 +5,7 @@
   "params": {
     "lookback": 6,
     "wick_ratio": 2.470621077908961,
-    "max_opp_wick_body": 0.48629169985453957,
+    "max_opp_wick_body": 0.4862916998545396,
     "min_body_frac_range": 0.22396944776930966,
     "max_hold": 4,
     "allow_flip": true
@@ -23,12 +23,12 @@
     "params": {
       "lookback": 6,
       "wick_ratio": 2.470621077908961,
-      "max_opp_wick_body": 0.48629169985453957,
+      "max_opp_wick_body": 0.4862916998545396,
       "min_body_frac_range": 0.22396944776930966,
       "max_hold": 4,
       "allow_flip": true
     }
   },
-  "timestamp": "2025-10-03T13:06:47.073916+00:00",
-  "paramhash": "9be0ce40dff1"
+  "timestamp": "2025-10-05T20:38:13.199375+00:00",
+  "paramhash": "bbe0ba1e58c2"
 }

@@ -1,3 +1,2 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:efa50f13c30ae84d795808c31043fd10f0a83831a0003c4605fc4d73811fba14
-size 155
+entry_time,exit_time,entry_price,exit_price,side,pnl_pct
+2022-01-28 00:00:00+00:00,2022-01-30 00:00:00+00:00,37194.0176,37903.54893,1,0.019076490677360836

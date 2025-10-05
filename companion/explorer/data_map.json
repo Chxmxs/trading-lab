@@ -1,0 +1,407 @@
+{
+  "BTCUSD": {
+    "15m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "1d": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "1m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "240m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "30m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "5m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "5m_60m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "60m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "720m": {
+      "ohlcv": [
+        "date"
+      ]
+    }
+  },
+  "ETHUSD": {
+    "15m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "1d": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "1m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "240m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "30m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "5m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "60m": {
+      "ohlcv": [
+        "date"
+      ]
+    },
+    "720m": {
+      "ohlcv": [
+        "date"
+      ]
+    }
+  },
+  "BTC": {
+    "1d": {
+      "metrics": [
+        "metric_btc.active_addresses",
+        "metric_btc.active_receiving_addresses",
+        "metric_btc.active_sending_addresses",
+        "metric_btc.adjusted_sopr_asopr",
+        "metric_btc.all_entities_supply",
+        "metric_btc.average_cap",
+        "metric_btc.average_dormancy",
+        "metric_btc.average_supply-adjusted_cdd",
+        "metric_btc.binary_cdd",
+        "metric_btc.blocks_mined",
+        "metric_btc.block_interval__mean",
+        "metric_btc.block_rewards",
+        "metric_btc.block_rewards_usd",
+        "metric_btc.block_size__mean",
+        "metric_btc.coinbase_premium_gap",
+        "metric_btc.coinbase_premium_index",
+        "metric_btc.coin_days_destroyed_cdd",
+        "metric_btc.delta_cap",
+        "metric_btc.difficulty",
+        "metric_btc.estimated_leverage_ratio_-_all_exchanges",
+        "metric_btc.exchange_active_receiver_addresses_log-scaled",
+        "metric_btc.exchange_active_sender_addresses_log-scaled",
+        "metric_btc.exchange_depositing_addresses_-_all_exchanges",
+        "metric_btc.exchange_depositing_transactions_-_all_exchanges",
+        "metric_btc.exchange_in-house_flow__mean_-_all_exchanges",
+        "metric_btc.exchange_in-house_flow__total_-_all_exchanges",
+        "metric_btc.exchange_in-house_transactions_-_all_exchanges",
+        "metric_btc.exchange_inflow_-_spent_output_age_bands_%_-_all_exchanges",
+        "metric_btc.exchange_inflow_-_spent_output_age_bands_-_all_exchanges",
+        "metric_btc.exchange_inflow_-_spent_output_value_bands_%_-_all_exchanges",
+        "metric_btc.exchange_inflow_-_spent_output_value_bands_-_all_exchanges",
+        "metric_btc.exchange_inflow_cdd_-_all_exchanges",
+        "metric_btc.exchange_inflow_mean_ma7_-_all_exchanges",
+        "metric_btc.exchange_inflow_top10_-_all_exchanges",
+        "metric_btc.exchange_inflow__mean_-_all_exchanges",
+        "metric_btc.exchange_inflow__total_-_all_exchanges",
+        "metric_btc.exchange_miner_supply",
+        "metric_btc.exchange_netflow__total_-_all_exchanges",
+        "metric_btc.exchange_outflow_mean_ma7_-_all_exchanges",
+        "metric_btc.exchange_outflow_top10_-_all_exchanges",
+        "metric_btc.exchange_outflow__mean_-_all_exchanges",
+        "metric_btc.exchange_outflow__total_-_all_exchanges",
+        "metric_btc.exchange_reserve_-_all_exchanges",
+        "metric_btc.exchange_reserve_ratio_kyc_vs._non-kyc",
+        "metric_btc.exchange_reserve_ratio_u.s._vs._off-shore",
+        "metric_btc.exchange_reserve_usd_-_all_exchanges",
+        "metric_btc.exchange_shutdown_index_-_all_exchanges",
+        "metric_btc.exchange_stablecoins_ratio_-_all_exchanges",
+        "metric_btc.exchange_stablecoins_ratio_usd_-_all_exchanges",
+        "metric_btc.exchange_supply",
+        "metric_btc.exchange_supply_ratio_-_all_exchanges",
+        "metric_btc.exchange_token_transferred_log-scaled",
+        "metric_btc.exchange_token_transferred_ratio_kyc_vs._non-kyc",
+        "metric_btc.exchange_token_transferred_ratio_us_vs._off-shore",
+        "metric_btc.exchange_to_exchange_flow__mean_-_all_exchanges_spot_exchanges",
+        "metric_btc.exchange_to_exchange_flow__total_-_all_exchanges_spot_exchanges",
+        "metric_btc.exchange_to_exchange_transactions_-_all_exchanges_spot_exchanges",
+        "metric_btc.exchange_to_miner_flow__mean_-_all_exchanges_all_miners",
+        "metric_btc.exchange_to_miner_flow__total_-_all_exchanges_all_miners",
+        "metric_btc.exchange_to_miner_transactions_-_all_exchanges_all_miners",
+        "metric_btc.exchange_whale_ratio_-_all_exchanges",
+        "metric_btc.exchange_withdrawing_addresses_-_all_exchanges",
+        "metric_btc.exchange_withdrawing_transactions_-_all_exchanges",
+        "metric_btc.fees_per_block_usd__mean",
+        "metric_btc.fees_per_block__mean",
+        "metric_btc.fees_per_transaction_usd__mean",
+        "metric_btc.fees_per_transaction_usd__median",
+        "metric_btc.fees_per_transaction__mean",
+        "metric_btc.fees_per_transaction__median",
+        "metric_btc.fees_to_reward_ratio",
+        "metric_btc.fees_usd__total",
+        "metric_btc.fees__total",
+        "metric_btc.funding_rates_-_all_exchanges",
+        "metric_btc.fund_flow_ratio_-_all_exchanges",
+        "metric_btc.fund_holdings_-_all_symbol",
+        "metric_btc.fund_market_premium_-_all_symbol",
+        "metric_btc.fund_price__usd_-_gbtc",
+        "metric_btc.fund_to_all_exchange_reserve_ratio",
+        "metric_btc.fund_to_kyc'd_exchange_reserve_ratio",
+        "metric_btc.fund_to_non-kyc'd_exchange_reserve_ratio",
+        "metric_btc.fund_volume_-_all_symbol",
+        "metric_btc.futures_taker_cvdcumulative_volume_delta_90-day",
+        "metric_btc.geographical_supply_distribution_by_entities",
+        "metric_btc.hashrate",
+        "metric_btc.korea_premium_index",
+        "metric_btc.long_liquidations_-_all_exchanges_all_symbol",
+        "metric_btc.long_liquidations_usd_-_all_exchanges_all_symbol",
+        "metric_btc.long_term_holder_sopr",
+        "metric_btc.market_cap",
+        "metric_btc.mean_coin_age",
+        "metric_btc.mean_coin_dollar_age",
+        "metric_btc.miners'_position_index_mpi",
+        "metric_btc.miner_depositing_addresses_-_all_miners",
+        "metric_btc.miner_depositing_transactions_-_all_miners",
+        "metric_btc.miner_in-house_flow__mean_-_all_miners",
+        "metric_btc.miner_in-house_flow__total_-_all_miners",
+        "metric_btc.miner_in-house_transactions_-_all_miners",
+        "metric_btc.miner_inflow_mean_ma7_-_all_miners",
+        "metric_btc.miner_inflow_top10_-_all_miners",
+        "metric_btc.miner_inflow__mean_-_all_miners",
+        "metric_btc.miner_inflow__total_-_all_miners",
+        "metric_btc.miner_netflow_total_-_all_miners",
+        "metric_btc.miner_outflow_mean_ma7_-_all_miners",
+        "metric_btc.miner_outflow_top10_-_all_miners",
+        "metric_btc.miner_outflow__mean_-_all_miners",
+        "metric_btc.miner_outflow__total_-_all_miners",
+        "metric_btc.miner_reserve_-_all_miners",
+        "metric_btc.miner_reserve_usd_-_all_miners",
+        "metric_btc.miner_selling_power_log-scaled",
+        "metric_btc.miner_supply_ratio_-_all_miners",
+        "metric_btc.miner_to_exchange_flow__mean_-_all_miners_all_exchanges",
+        "metric_btc.miner_to_exchange_flow__total_-_all_miners_all_exchanges",
+        "metric_btc.miner_to_exchange_transactions_-_all_miners_all_exchanges",
+        "metric_btc.miner_to_miner_flow__mean_-_all_miners_1thash",
+        "metric_btc.miner_to_miner_flow__total_-_all_miners_1thash",
+        "metric_btc.miner_to_miner_transactions_-_all_miners_1thash",
+        "metric_btc.miner_withdrawing_addresses_-_all_miners",
+        "metric_btc.miner_withdrawing_transactions_-_all_miners",
+        "metric_btc.mvrv_ratio",
+        "metric_btc.net_realized_profit_loss_nrpl",
+        "metric_btc.net_unrealized_loss_nul",
+        "metric_btc.net_unrealized_profit_loss_nupl",
+        "metric_btc.net_unrealized_profit_nup",
+        "metric_btc.new_supply",
+        "metric_btc.number_of_entities",
+        "metric_btc.nvm_ratio",
+        "metric_btc.nvt_golden_cross",
+        "metric_btc.nvt_ratio",
+        "metric_btc.open_interest_-_all_exchanges_all_symbol",
+        "metric_btc.plustoken_interflow_analysis",
+        "metric_btc.plustoken_reserve_analysis",
+        "metric_btc.puell_multiple",
+        "metric_btc.realized_cap",
+        "metric_btc.realized_cap_-_utxo_age_bands_%",
+        "metric_btc.realized_cap_-_utxo_age_bands_usd",
+        "metric_btc.realized_cap_-_utxo_value_bands_%",
+        "metric_btc.realized_cap_-_utxo_value_bands_usd",
+        "metric_btc.realized_price",
+        "metric_btc.realized_price_-_utxo_age_bands",
+        "metric_btc.short_liquidations_-_all_exchanges_all_symbol",
+        "metric_btc.short_liquidations_usd_-_all_exchanges_all_symbol",
+        "metric_btc.short_term_holder_sopr",
+        "metric_btc.sopr_ratio_lth-sopr_sth-sopr",
+        "metric_btc.spent_output_age_bands",
+        "metric_btc.spent_output_age_bands_%",
+        "metric_btc.spent_output_age_bands_usd",
+        "metric_btc.spent_output_profit_ratio_sopr",
+        "metric_btc.spent_output_value_bands",
+        "metric_btc.spent_output_value_bands_%",
+        "metric_btc.spent_output_value_bands_usd",
+        "metric_btc.spot_taker_cvdcumulative_volume_delta_90-day",
+        "metric_btc.stablecoin_supply_ratio_ssr",
+        "metric_btc.stock-to-flow_ratio",
+        "metric_btc.stock-to-flow_reversion",
+        "metric_btc.sum_coin_age",
+        "metric_btc.sum_coin_age_distribution",
+        "metric_btc.sum_coin_age_distribution_%",
+        "metric_btc.sum_coin_dollar_age",
+        "metric_btc.supply-adjusted_cdd",
+        "metric_btc.supply_adjusted_dormancy",
+        "metric_btc.supply_in_loss",
+        "metric_btc.supply_in_loss_%",
+        "metric_btc.supply_in_profit",
+        "metric_btc.supply_in_profit_%",
+        "metric_btc.taker_buy_ratio_-_all_exchanges",
+        "metric_btc.taker_buy_sell_ratio_-_all_exchanges",
+        "metric_btc.taker_buy_volume_-_all_exchanges",
+        "metric_btc.taker_sell_ratio_-_all_exchanges",
+        "metric_btc.taker_sell_volume_-_all_exchanges",
+        "metric_btc.thermo_cap",
+        "metric_btc.tokens_transferred__mean",
+        "metric_btc.tokens_transferred__median",
+        "metric_btc.tokens_transferred__total",
+        "metric_btc.total_supply",
+        "metric_btc.trading_volume_kyc_vs._non-kyc",
+        "metric_btc.trading_volume_ratio_kyc_vs._non-kyc",
+        "metric_btc.trading_volume_ratio_spot_vs._derivative",
+        "metric_btc.trading_volume_spot_vs._derivative",
+        "metric_btc.transaction_count__mean",
+        "metric_btc.transaction_count__total",
+        "metric_btc.u.s._to_the_rest_reserve_ratio",
+        "metric_btc.utxos_in_loss",
+        "metric_btc.utxos_in_loss_%",
+        "metric_btc.utxos_in_profit",
+        "metric_btc.utxos_in_profit_%",
+        "metric_btc.utxo_age_bands",
+        "metric_btc.utxo_age_bands_%",
+        "metric_btc.utxo_age_bands_usd",
+        "metric_btc.utxo_count",
+        "metric_btc.utxo_count_-_age_bands",
+        "metric_btc.utxo_count_-_age_bands_%",
+        "metric_btc.utxo_count_-_value_bands",
+        "metric_btc.utxo_count_-_value_bands_%",
+        "metric_btc.utxo_value_bands",
+        "metric_btc.utxo_value_bands_%",
+        "metric_btc.velocity"
+      ]
+    }
+  },
+  "ETH": {
+    "1d": {
+      "metrics": [
+        "metric_eth.active_addresses",
+        "metric_eth.active_addresses_-_internal_external_eoa",
+        "metric_eth.active_receiving_addresses",
+        "metric_eth.active_receiving_addresses_-_internal_external_eoa",
+        "metric_eth.active_sending_addresses",
+        "metric_eth.active_sending_addresses_-_internal_external_eoa",
+        "metric_eth.base_fee_per_gas__mean",
+        "metric_eth.blocks_mined",
+        "metric_eth.block_interval__mean",
+        "metric_eth.block_rewards",
+        "metric_eth.block_rewards_except_uncle_blocks",
+        "metric_eth.block_rewards_usd",
+        "metric_eth.block_rewards_usd_except_uncle_blocks",
+        "metric_eth.block_size__mean",
+        "metric_eth.coinbase_premium_gap",
+        "metric_eth.coinbase_premium_index",
+        "metric_eth.destroyed_contracts",
+        "metric_eth.difficulty",
+        "metric_eth.estimated_leverage_ratio_-_all_exchanges",
+        "metric_eth.exchange_depositing_addresses_-_all_exchanges",
+        "metric_eth.exchange_depositing_transactions_-_all_exchanges",
+        "metric_eth.exchange_inflow_mean_ma7_-_all_exchanges",
+        "metric_eth.exchange_inflow_top10_-_all_exchanges",
+        "metric_eth.exchange_inflow__mean_-_all_exchanges",
+        "metric_eth.exchange_inflow__total_-_all_exchanges",
+        "metric_eth.exchange_netflow__total_-_all_exchanges",
+        "metric_eth.exchange_outflow_mean_ma7_-_all_exchanges",
+        "metric_eth.exchange_outflow_top10_-_all_exchanges",
+        "metric_eth.exchange_outflow__mean_-_all_exchanges",
+        "metric_eth.exchange_outflow__total_-_all_exchanges",
+        "metric_eth.exchange_reserve_-_all_exchanges",
+        "metric_eth.exchange_reserve_usd_-_all_exchanges",
+        "metric_eth.exchange_supply_ratio_-_all_exchanges",
+        "metric_eth.exchange_withdrawing_addresses_-_all_exchanges",
+        "metric_eth.exchange_withdrawing_transactions_-_all_exchanges",
+        "metric_eth.fees_burnt_per_transaction_usd__mean",
+        "metric_eth.fees_burnt_per_transaction_usd__median",
+        "metric_eth.fees_burnt_per_transaction__mean",
+        "metric_eth.fees_burnt_per_transaction__median",
+        "metric_eth.fees_burnt_usd__total",
+        "metric_eth.fees_burnt__total",
+        "metric_eth.fees_per_block_usd__mean",
+        "metric_eth.fees_per_block__mean",
+        "metric_eth.fees_per_transaction_usd__mean",
+        "metric_eth.fees_per_transaction_usd__median",
+        "metric_eth.fees_per_transaction__mean",
+        "metric_eth.fees_per_transaction__median",
+        "metric_eth.fees_to_reward_ratio",
+        "metric_eth.fees_usd__total",
+        "metric_eth.fees__total",
+        "metric_eth.funding_rates_-_all_exchanges",
+        "metric_eth.fund_holdings_-_ethe",
+        "metric_eth.fund_market_premium_-_ethe",
+        "metric_eth.fund_price__usd_-_ethe",
+        "metric_eth.fund_volume_-_ethe",
+        "metric_eth.futures_taker_cvdcumulative_volume_delta_90-day",
+        "metric_eth.gas_limit__mean",
+        "metric_eth.gas_price__mean",
+        "metric_eth.gas_used__mean",
+        "metric_eth.gas_used__total",
+        "metric_eth.hashrate",
+        "metric_eth.korea_premium_index",
+        "metric_eth.long_liquidations_-_all_exchanges_all_symbol",
+        "metric_eth.long_liquidations_usd_-_all_exchanges_all_symbol",
+        "metric_eth.market_cap",
+        "metric_eth.max_fee_per_gas__mean",
+        "metric_eth.max_priority_fee_per_gas__mean",
+        "metric_eth.new_contracts",
+        "metric_eth.new_supply",
+        "metric_eth.number_of_contracts",
+        "metric_eth.open_interest_-_all_exchanges_all_symbol",
+        "metric_eth.priority_fees_per_transaction_usd__mean",
+        "metric_eth.priority_fees_per_transaction_usd__median",
+        "metric_eth.priority_fees_per_transaction__mean",
+        "metric_eth.priority_fees_per_transaction__median",
+        "metric_eth.priority_fees_usd__total",
+        "metric_eth.priority_fees__total",
+        "metric_eth.short_liquidations_-_all_exchanges_all_symbol",
+        "metric_eth.short_liquidations_usd_-_all_exchanges_all_symbol",
+        "metric_eth.spot_taker_cvdcumulative_volume_delta_90-day",
+        "metric_eth.taker_buy_ratio_-_all_exchanges",
+        "metric_eth.taker_buy_sell_ratio_-_all_exchanges",
+        "metric_eth.taker_buy_volume_-_all_exchanges",
+        "metric_eth.taker_sell_ratio_-_all_exchanges",
+        "metric_eth.taker_sell_volume_-_all_exchanges",
+        "metric_eth.tokens_transferred_usd__mean",
+        "metric_eth.tokens_transferred_usd__median",
+        "metric_eth.tokens_transferred_usd__total",
+        "metric_eth.tokens_transferred__mean",
+        "metric_eth.tokens_transferred__median",
+        "metric_eth.tokens_transferred__total",
+        "metric_eth.total_supply",
+        "metric_eth.transactions_between_eoa__mean",
+        "metric_eth.transactions_between_eoa__total",
+        "metric_eth.transaction_count_-_internal_external_eoa__mean",
+        "metric_eth.transaction_count_-_internal_external_eoa__total",
+        "metric_eth.transaction_count__mean",
+        "metric_eth.transaction_count__total",
+        "metric_eth.transfers_between_eoa__mean",
+        "metric_eth.transfers_between_eoa__total",
+        "metric_eth.transfer_count_-_internal_external_eoa__mean",
+        "metric_eth.transfer_count_-_internal_external_eoa__total",
+        "metric_eth.transfer_count__mean",
+        "metric_eth.transfer_count__total",
+        "metric_eth.uncle_blocks_mined",
+        "metric_eth.uncle_block_rewards",
+        "metric_eth.uncle_block_rewards_usd",
+        "metric_eth.velocity"
+      ]
+    }
+  }
+}

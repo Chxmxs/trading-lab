@@ -6,7 +6,7 @@
     "lookback": 5,
     "wick_ratio": 2.276870472053129,
     "max_opp_wick_body": 0.2106059177682418,
-    "min_body_frac_range": 0.1292109922185753,
+    "min_body_frac_range": 0.12921099221857532,
     "max_hold": 5,
     "allow_flip": false
   },
@@ -24,11 +24,11 @@
       "lookback": 5,
       "wick_ratio": 2.276870472053129,
       "max_opp_wick_body": 0.2106059177682418,
-      "min_body_frac_range": 0.1292109922185753,
+      "min_body_frac_range": 0.12921099221857532,
       "max_hold": 5,
       "allow_flip": false
     }
   },
-  "timestamp": "2025-10-03T13:06:47.746507+00:00",
-  "paramhash": "513e6fce7957"
+  "timestamp": "2025-10-05T20:38:13.877375+00:00",
+  "paramhash": "56a408d34d10"
 }

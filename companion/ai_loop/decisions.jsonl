@@ -1,0 +1,11 @@
+{"timestamp": "2025-10-05T18:24:09.970514", "command": "status", "info": {"count": 0}}
+{"timestamp": "2025-10-05T18:25:18.698091", "command": "watch", "info": {"report_path": "C:\\Users\\Gladiator\\trading-lab\\companion\\ai_loop\\logs\\monitor_report.json"}}
+{"timestamp": "2025-10-05T18:25:20.029090", "command": "status", "info": {"count": 0}}
+{"ts": "2025-10-05T19:11:18.579292+00:00", "event": "patch_apply", "run_id": "2d13c4c321704761b584fc4e01cc90c8", "applied": [], "skipped": ["ohlc_patch", "timestamp_patch"], "errors": []}
+{"ts": "2025-10-05T19:11:18.579292+00:00", "event": "apply_patches", "run_id": "2d13c4c321704761b584fc4e01cc90c8", "dry_run": true, "result": {"run_id": "2d13c4c321704761b584fc4e01cc90c8", "applied": [], "skipped": ["ohlc_patch", "timestamp_patch"], "errors": []}}
+{"ts": "2025-10-05T19:11:29.540131+00:00", "event": "patch_apply", "run_id": "2d13c4c321704761b584fc4e01cc90c8", "applied": ["ohlc_patch", "timestamp_patch"], "skipped": [], "errors": []}
+{"ts": "2025-10-05T19:11:29.540631+00:00", "event": "apply_patches", "run_id": "2d13c4c321704761b584fc4e01cc90c8", "dry_run": false, "result": {"run_id": "2d13c4c321704761b584fc4e01cc90c8", "applied": ["ohlc_patch", "timestamp_patch"], "skipped": [], "errors": []}}
+{"ts": "2025-10-05T19:14:26.622921+00:00", "event": "status", "queued": 1}
+{"ts": "2025-10-05T19:27:22.962056+00:00", "event": "patch_apply", "run_id": "2d13c4c321704761b584fc4e01cc90c8", "applied": ["ohlc_patch", "timestamp_patch"], "skipped": [], "errors": []}
+{"ts": "2025-10-05T19:27:22.964556+00:00", "event": "apply_patches", "run_id": "2d13c4c321704761b584fc4e01cc90c8", "dry_run": false, "result": {"run_id": "2d13c4c321704761b584fc4e01cc90c8", "applied": ["ohlc_patch", "timestamp_patch"], "skipped": [], "errors": []}}
+{"ts": "2025-10-05T19:27:24.475151+00:00", "event": "status", "queued": 1}
