@@ -1,0 +1,1 @@
+﻿{"symbol":"BTCUSD","kind":"context_min","start":"2020-01-01","data_sources":["artifacts/_ci/consumer_demo/ohlcv.csv","artifacts/_ci/consumer_demo/metric.csv"],"run_config":{},"price_csv":"artifacts/_ci/consumer_demo/ohlcv.csv","end":"2020-01-10","strategy_stub":"smoke","timeframe":"15m"}
