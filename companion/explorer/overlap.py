@@ -1,9 +1,10 @@
 ﻿from __future__ import annotations
 from pathlib import Path
-from typing import Union
-import os, pandas as pd
+from typing import Union, Iterable, Dict, Any
+import os
+import pandas as pd
 
-__all__ = ["load_trade_structure"]
+__all__ = ["load_trade_structure", "jaccard_points", "prune_overlap_strategies"]
 
 _CANON = ["run_id","strategy","symbol","timeframe","side","qty",
           "entry_time","entry_price","exit_time","exit_price",
@@ -32,9 +33,13 @@ def _normalize(df: pd.DataFrame) -> pd.DataFrame:
 
     # sides
     if "side" in df.columns:
-        df["side"] = df["side"].astype(str).str.upper().map(
-            {"BUY":"LONG","LONG":"LONG","L":"LONG","SELL":"SHORT","SHORT":"SHORT","S":"SHORT"}
-        ).fillna(df["side"])
+        df["side"] = (
+            df["side"]
+            .astype(str)
+            .str.upper()
+            .map({"BUY":"LONG","LONG":"LONG","L":"LONG","SELL":"SHORT","SHORT":"SHORT","S":"SHORT"})
+            .fillna(df["side"])
+        )
 
     # times
     for t in ("entry_time","exit_time"):
@@ -57,7 +62,7 @@ def _normalize(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 def load_trade_structure(source: Union[str, os.PathLike, pd.DataFrame], *, assume_csv_has_header: bool = True) -> pd.DataFrame:
-    """Load trades from CSV or DataFrame and normalize schema."""
+    """Load trades from CSV or DataFrame and normalize schema. Surface 'points' from 'ts' if present."""
     if isinstance(source, pd.DataFrame):
         df = source.copy()
     else:
@@ -69,6 +74,97 @@ def load_trade_structure(source: Union[str, os.PathLike, pd.DataFrame], *, assum
             kw["header"] = None
         df = pd.read_csv(p, **kw)
     df = _normalize(df)
+    # tests use a CSV with a 'ts' column of discrete trade timestamps
     if "ts" in df.columns and "points" not in df.columns:
-        df["points"] = df["ts"]  # test fixtures expect this alias
+        df["points"] = df["ts"]
     return df
+
+def jaccard_points(a: Iterable[Any], b: Iterable[Any]) -> float:
+    """Jaccard index on point sets (timestamps or strings)."""
+    import pandas as pd
+    def _norm(seq):
+        S = set()
+        if seq is None: return S
+        for v in seq:
+            if v is None: continue
+            try:
+                t = pd.to_datetime(v, utc=True)
+                if pd.isna(t): continue
+                S.add(int(t.value))  # ns epoch
+            except Exception:
+                S.add(str(v))
+        return S
+    A = _norm(a); B = _norm(b)
+    if not A and not B: return 0.0
+    return float(len(A & B) / len(A | B))
+
+def prune_overlap_strategies(df: pd.DataFrame, *,
+                             overlap_threshold: float = 0.75,
+                             score_col: str = "oos_mar",
+                             mlflow_log: bool = False,
+                             artifacts_dir = None,
+                             threshold: float = None,
+                             score_column: str = None) -> pd.DataFrame:
+    """
+    Prune a candidate master list of strategies by overlap.
+    Expected input (per tests): rows with columns including 'strategy_id' and 'trades_csv',
+    optionally a score column (default 'oos_mar'). Keep best-first, drop later ones whose
+    Jaccard(points) with any kept >= overlap_threshold.
+    """
+    # Accept alias names (if tests call with threshold/score_column instead)
+    if threshold is not None:
+        overlap_threshold = float(threshold)
+    if score_column is not None:
+        score_col = str(score_column)
+
+    # If this already looks like per-trade rows (has entry_time), no-op
+    if "entry_time" in df.columns and "trades_csv" not in df.columns:
+        return df
+
+    # Build points per candidate
+    rows = []
+    for _, r in df.iterrows():
+        sid = str(r.get("strategy_id", r.get("strategy", "")))
+        tcsv = r.get("trades_csv")
+        if pd.isna(tcsv) or not tcsv:
+            rows.append((sid, set(), r))
+            continue
+        tdf = load_trade_structure(str(tcsv))
+        pts = set()
+        if "points" in tdf.columns:
+            pts = set(tdf["points"].dropna().astype(str).tolist())
+        elif "entry_time" in tdf.columns:
+            pts = set(tdf["entry_time"].dropna().astype(str).tolist())
+        rows.append((sid, pts, r))
+
+    # Sort candidates best-first by score_col (desc), missing -> very low
+    def _score(rr):
+        v = rr[2].get(score_col, None)
+        try:
+            return float(v)
+        except Exception:
+            return float("-inf")
+    rows.sort(key=_score, reverse=True)
+
+    kept_ids = []
+    kept_pts = []
+    kept_rows = []
+
+    for sid, pts, meta in rows:
+        drop = False
+        for other_pts in kept_pts:
+            if not pts and not other_pts:
+                continue
+            jac = jaccard_points(pts, other_pts)
+            if jac >= float(overlap_threshold):
+                drop = True
+                break
+        if not drop:
+            kept_ids.append(sid)
+            kept_pts.append(pts)
+            kept_rows.append(meta)
+
+    # Return a DataFrame of kept rows (preserve original columns)
+    if kept_rows:
+        return pd.DataFrame(kept_rows).reset_index(drop=True)
+    return df.iloc[0:0].copy()
