@@ -65,7 +65,7 @@ def interval_overlap_score(a_start, a_end, b_start, b_end) -> float:
 
 def jaccard_points(a: Iterable[Any], b: Iterable[Any]) -> float:
     import pandas as pd
-    def _norm(seq):
+def _norm(seq):
         S = set()
         if seq is None: return S
         for v in seq:
@@ -123,7 +123,7 @@ def prune_overlap_strategies(df: pd.DataFrame, *,
             else: pts = set()
             rows.append((sid, pts, r))
         # sort best-first
-        def _score(rr):
+def _score(rr):
             v = rr[2].get(score_col, None)
             try: return float(v)
             except Exception: return float("-inf")
@@ -200,3 +200,4 @@ __all__ = ['load_trade_structure','interval_overlap_score','jaccard_points','pru
     with open(out, "w", encoding="utf-8") as f:
         json.dump(str(obj), f, ensure_ascii=False, indent=2)
     return out
+
