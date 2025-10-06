@@ -1,0 +1,20 @@
+{
+  "jobs": [
+    {
+      "method": "triple",
+      "symbol": "BTCUSD",
+      "timeframe": "15m",
+      "price_csv": "data/cleaned/ohlcv_BTCUSD@15m.csv",
+      "out_root": "data/parquet",
+      "params": { "pt_mult": 2.0, "sl_mult": 2.0, "horizon_bars": 48, "vol_lookback": 50, "side": "long" }
+    },
+    {
+      "method": "fixed",
+      "symbol": "BTCUSD",
+      "timeframe": "1d",
+      "price_csv": "data/cleaned/ohlcv_BTCUSD@1d.csv",
+      "out_root": "data/parquet",
+      "params": { "pt": 0.05, "sl": 0.05, "horizon_bars": 10, "side": "long" }
+    }
+  ]
+}
