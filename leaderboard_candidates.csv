@@ -1,0 +1,4 @@
+﻿strategy_id,symbol,timeframe,trades_csv,oos_mar
+A,BTCUSD,15m,artifacts/_ci/overlap/trades_A.csv,1.2
+B,BTCUSD,15m,artifacts/_ci/overlap/trades_B.csv,0.9
+C,BTCUSD,15m,artifacts/_ci/overlap/trades_C.csv,1.1

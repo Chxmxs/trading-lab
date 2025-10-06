@@ -46,3 +46,14 @@
 [2025-10-05 19:41:54] INFO companion.patch_registry - apply_all_patches: applied ohlc_patch
 [2025-10-05 19:41:54] INFO companion.patchers.timestamp_patch - timestamp_patch applied for run_id=test at artifacts\_quarantine
 [2025-10-05 19:41:54] INFO companion.patch_registry - apply_all_patches: applied timestamp_patch
+[2025-10-05 21:10:08] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 21:10:08] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 21:10:08] ERROR companion.patch_registry - apply_all_patches: ohlc_patch failed -> The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+[2025-10-05 21:10:08] ERROR companion.patch_registry - apply_all_patches: timestamp_patch failed -> The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+[2025-10-05 21:10:08] INFO companion.patch_registry - Registered patcher: ohlc_patch
+[2025-10-05 21:10:08] INFO companion.patch_registry - Registered patcher: timestamp_patch
+[2025-10-05 21:10:08] ERROR companion.patch_registry - apply_all_patches: ohlc_patch failed -> The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+[2025-10-05 21:10:08] ERROR companion.patch_registry - apply_all_patches: timestamp_patch failed -> The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+[2025-10-06 08:14:21] INFO companion.explorer.overlap - Overlap pruning complete. Kept=2, Pruned=1, Artifacts=C:\Users\Gladiator\AppData\Local\Temp\pytest-of-Gladiator\pytest-33\test_prune_overlap_basic0\overlap_artifacts\2025-10-06T121421
+[2025-10-06 08:18:09] INFO companion.explorer.overlap - Overlap pruning complete. Kept=2, Pruned=1, Artifacts=artifacts\overlap\2025-10-06T121809
+[2025-10-06 08:18:09] INFO companion.explorer.refresh_master - Master list refreshed with overlap pruning: kept=2, pruned=1

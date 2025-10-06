@@ -1,0 +1,45 @@
+$phase10 = @'
+# Phase 10 — Intelligence Loop (Runbook + Design)
+
+This document explains *what changed in Phase 10* and *how to run it* end-to-end.
+
+---
+
+## At a glance
+
+- **Data Health Tagging**: `orchestrator/execute.py` runs a cached preflight before each job.  
+  - `pass|warn` → run proceeds, MLflow tag `data_health=...` + artifact `health/health_summary.json`.  
+  - `fail` → minimal MLflow run tagged `SKIPPED` (`skip_reason=health_check`) and returns early.
+
+- **Queue Consumer**: `companion/ai_loop/consumer.py` pops JSONL jobs (`artifacts/_queue/jobs.jsonl`), rebuilds context, starts an MLflow run, executes `run_one_core(context)`, and applies data-health tags/artifacts.
+
+- **ML Entry Filter**: `companion/ml/entry_filter.py` filters proposed entries with a model (MLflow uri or local), logs acceptance metrics in MLflow.  
+  - Base features fallback: `basic_price_features_from_csv(...)`.  
+  - Real features recommended via your feature store.
+
+- **Meta-Labels**: `scripts/gen_meta_labels.py` (run in `tradebot-mlfl`) writes Parquet label files to `data/parquet/<SYMBOL>/<TF>/labels_*.parquet`.  
+  - `companion/ml/feature_adapter.py` can `load_latest_labels()` and `join_features_with_labels()`.
+
+- **Intelligence Daemon**: `companion/ai_loop/daemon.py` cycle:
+  1) scan MLflow (optional monitor) → enqueue patches
+  2) consume N queue jobs
+  3) refresh leaderboard+master
+  4) retention
+  5) sleep, repeat
+
+---
+
+## Architecture (Mermaid)
+
+```mermaid
+flowchart TD
+  A[Queue jobs.jsonl] --> B[consumer.py\n(build context → mlflow.start_run → run_one_core)]
+  B --> C{execute.py\nData-Health Preflight}
+  C -- fail --> S[MLflow run tagged\nSKIPPED + health_summary.json]
+  C -- pass|warn --> D[Strategy.run → Entries]
+  D --> E[entry_filter.filter_with_model]
+  E --> F[Trades/Equity → Metrics/Artifacts]
+  F --> G[MLflow (metrics + artifacts)]
+  G --> H[refresh_master.py\n(leaderboard.md + master_list.json)]
+  G --> I[monitor.py (optional)\nscan failed/skipped → patches → requeue]
+  H --> J[daemon.py loop\n(scan→consume→refresh→retention)]

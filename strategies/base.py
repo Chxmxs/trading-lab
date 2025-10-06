@@ -1,12 +1,25 @@
-﻿from __future__ import annotations
+﻿# -*- coding: utf-8 -*-
+"""
+StrategyBase with optional ML hooks (Phase 3.5) and ML entry-filter integration (Phase 10).
+Outputs must match orchestrator contract:
+  - equity: pd.Series (UTC index), name='equity'
+  - trades: pd.DataFrame with columns = TRADE_COLUMNS
+"""
+
+from __future__ import annotations
 
 import os
 import logging
-from typing import Any, Dict, Optional, Union, Tuple, Iterable
+from typing import Any, Dict, Optional, Union
+
 import pandas as pd
 from pandas import Timestamp
+
 from .types import TRADE_COLUMNS, RunConfig, RunResult
 
+# -----------------------------------------------------------------------------
+# Logging setup
+# -----------------------------------------------------------------------------
 _LOG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
 os.makedirs(_LOG_DIR, exist_ok=True)
 
@@ -29,6 +42,9 @@ def _make_file_logger() -> logging.Logger:
     logging.Formatter.converter = lambda *args: pd.Timestamp.utcnow().timetuple()
     return logger
 
+# -----------------------------------------------------------------------------
+# Small helpers
+# -----------------------------------------------------------------------------
 def _ensure_utc_index(idx: pd.DatetimeIndex) -> pd.DatetimeIndex:
     if not isinstance(idx, pd.DatetimeIndex):
         raise TypeError("Index must be a pandas.DatetimeIndex")
@@ -47,25 +63,26 @@ def _flat_equity(index: pd.DatetimeIndex, cash: float) -> pd.Series:
     s.name = "equity"
     return s
 
+# -----------------------------------------------------------------------------
+# Strategy Base
+# -----------------------------------------------------------------------------
 class StrategyBase:
     """
     StrategyBase with optional ML hooks for MLfinLab-style workflows.
+
     Compatibility rules:
       - If only rule-based generate_signals(...) is used, ML hooks are ignored.
       - If ML hooks are used and produce no entries after filtering, we log it and
         return a valid no-trades run (equity series + empty trades schema).
-
-    Required outputs (for orchestrator/phase-3 compatibility):
-      - equity: pd.Series with UTC index, name='equity'
-      - trades: pd.DataFrame with exact columns TRADE_COLUMNS
     """
+
     def __init__(self, name: Optional[str] = None, config: Optional[Dict[str, Any]] = None, **kwargs):
         self.name = name or self.__class__.__name__
         self.config = config or {}
         self.params = kwargs or {}
         self.logger = _make_file_logger().getChild(f"Strategy.{self.name}")
 
-    # -------- Rule-based path (legacy) --------
+    # -------- Rule-based path (legacy) ----------------------------------------
     def generate_signals(self, df: pd.DataFrame) -> Optional[pd.Series]:
         """
         Optional: Rule-based signals (boolean Series, UTC index) for entries.
@@ -73,7 +90,7 @@ class StrategyBase:
         """
         return None
 
-    # -------- ML hooks (Phase 3.5) --------
+    # -------- ML hooks (Phase 3.5) -------------------------------------------
     def propose_entries(self, df: pd.DataFrame) -> Optional[Union[pd.Series, pd.DataFrame]]:
         """
         Optional: Emit candidate entry events.
@@ -84,17 +101,51 @@ class StrategyBase:
         """
         return None
 
-    def filter_entries(self, entries: Union[pd.Series, pd.DataFrame, None],
-                       meta_probs: Optional[Union[pd.Series, Dict[str, float]]] = None
-                       ) -> Optional[Union[pd.Series, pd.DataFrame]]:
+    def filter_entries(self, entries, context):
         """
-        Optional: Meta-label filtering. Receives output from propose_entries and
-        optional meta probabilities. Returns filtered entries; may return empty.
-        Default: return entries unchanged.
-        """
-        return entries
+        Default ML-aware filter:
+          - If context['entry_filter']['enabled'] is True, score entries with a model and keep prob >= threshold.
+          - Else: pass-through.
 
-    # -------- Run orchestration --------
+        Side effects on context:
+          context['entry_filter_stats'] = {'kept','total','accept_rate','threshold'}
+          context['entry_filter_proba_index'] = list of index values scored (for traceability)
+        """
+        ef = (context or {}).get("entry_filter") or {}
+        if not ef.get("enabled", False):
+            return entries  # pass-through
+
+        model_uri = ef.get("model_uri") or ef.get("model")
+        threshold = float(ef.get("threshold", 0.5))
+
+        # Prefer precomputed features_df in context; else build basic from price_csv
+        X = context.get("features_df")
+        if X is None:
+            try:
+                from companion.ml.feature_adapter import basic_price_features_from_csv
+                price_csv = context.get("price_csv")
+                if price_csv:
+                    X = basic_price_features_from_csv(price_csv)
+            except Exception:
+                X = None  # still allow pass-through if features missing
+
+        # Align X rows to entries index if both exist
+        if X is not None and hasattr(entries, "index"):
+            X = X.reindex(entries.index, method=None)
+
+        from companion.ml.entry_filter import filter_with_model
+        out = filter_with_model(model_uri=model_uri, X=X, entries=entries, threshold=threshold)
+
+        # Stash stats & small trace into context for downstream logging
+        context["entry_filter_stats"] = out["stats"]
+        try:
+            context["entry_filter_proba_index"] = list(out["proba"].index.astype(str)) if out["proba"] is not None else []
+        except Exception:
+            context["entry_filter_proba_index"] = []
+
+        return out["entries"] if out["entries"] is not None else entries
+
+    # -------- Run orchestration ----------------------------------------------
     def run(self, df: pd.DataFrame, run_config: Optional[RunConfig] = None) -> RunResult:
         """
         Execute the strategy given a price DataFrame (UTC index recommended).
@@ -129,20 +180,25 @@ class StrategyBase:
             entries_df = self._normalize_entries(entries)
             proposed_count = 0 if entries_df is None else int(entries_df.shape[0])
 
-            filtered = self.filter_entries(entries_df, meta_probs=None)
+            # >>> Correct call: pass context, not meta_probs
+            context: Dict[str, Any] = run_config.get("context", {})
+            filtered = self.filter_entries(entries_df, context=context)
             filtered_df = self._normalize_entries(filtered)
             filtered_count = 0 if filtered_df is None else int(filtered_df.shape[0])
 
-            # This base wiring does not convert entries -> actual trades.
-            # Subclasses or Phase 4 runners can add execution. We just log counts.
+            # Base class does not convert entries -> trades; subclasses can implement.
             placed_orders = 0
 
             self.logger.info(f"proposed_entries={proposed_count}")
             self.logger.info(f"filtered_entries={filtered_count}")
             self.logger.info(f"placed_orders={placed_orders}")
 
-            # No trades path still valid: return flat equity + empty trades.
-            result: RunResult = {"equity": equity, "trades": trades, "stats": {"proposed": proposed_count, "filtered": filtered_count, "placed": placed_orders}}
+            # Valid no-trades run (equity + empty trades) to keep pipeline consistent
+            result: RunResult = {
+                "equity": equity,
+                "trades": trades,
+                "stats": {"proposed": proposed_count, "filtered": filtered_count, "placed": placed_orders},
+            }
             return result
 
         # Else: rule-based path (fallback)
@@ -157,9 +213,13 @@ class StrategyBase:
             self.logger.info(f"filtered_entries={filtered_count}")
             self.logger.info(f"placed_orders={placed_orders}")
 
-        return {"equity": equity, "trades": trades, "stats": {"proposed": proposed_count, "filtered": filtered_count, "placed": placed_orders}}
+        return {
+            "equity": equity,
+            "trades": trades,
+            "stats": {"proposed": proposed_count, "filtered": filtered_count, "placed": placed_orders},
+        }
 
-    # -------- Helpers --------
+    # -------- Helpers ---------------------------------------------------------
     def _normalize_series(self, s: Optional[pd.Series]) -> Optional[pd.Series]:
         if s is None:
             return None
@@ -168,8 +228,7 @@ class StrategyBase:
         s.index = _ensure_utc_index(pd.DatetimeIndex(s.index))
         return s
 
-    def _normalize_entries(self, entries: Optional[Union[pd.Series, pd.DataFrame]]
-                           ) -> Optional[pd.DataFrame]:
+    def _normalize_entries(self, entries: Optional[Union[pd.Series, pd.DataFrame]]) -> Optional[pd.DataFrame]:
         if entries is None:
             return None
         if isinstance(entries, pd.Series):

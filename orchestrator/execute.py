@@ -151,6 +151,20 @@ def run_one_core(context: Dict[str, Any]) -> Any:
 
         equity, trades = strat.run(df, run_config)
 
+        # Log entry-filter acceptance metrics if present
+        try:
+            import mlflow  # lazy import
+            if mlflow.active_run() is not None:
+                ef_stats = context.get("entry_filter_stats") or {}
+                if ef_stats:
+                    mlflow.log_metric("filter_kept",        float(ef_stats.get("kept", 0)))
+                    mlflow.log_metric("filter_total",       float(ef_stats.get("total", 0)))
+                    mlflow.log_metric("filter_accept_rate", float(ef_stats.get("accept_rate", 0.0)))
+                    mlflow.log_metric("filter_threshold",   float(ef_stats.get("threshold", 0.5)))
+        except Exception:
+            pass
+
+
         # Stash for downstream steps if needed
         context["equity"] = equity
         context["trades"] = trades

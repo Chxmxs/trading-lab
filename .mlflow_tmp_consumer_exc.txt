@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "C:\Users\Gladiator\trading-lab\companion\ai_loop\consumer.py", line 237, in consume_once
+    result = run_one_core(context)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\orchestrator\execute.py", line 104, in run_one_core
+    _health = preflight_data_health(
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Gladiator\trading-lab\companion\data_checks\health_runner.py", line 113, in preflight_data_health
+    status = (summary.get("status") or summary.get("result") or "").lower().strip()
+              ^^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'get'
