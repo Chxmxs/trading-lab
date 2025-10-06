@@ -5,3 +5,9 @@ __pycache__/
 companion/explorer/llm_logs.json
 results/
 data/usable/
+# Logs & temp
+companion/logs/*.log
+artifacts/**
+mlruns/**
+*.tmp
+*.log
