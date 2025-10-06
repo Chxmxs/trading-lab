@@ -1,91 +1,56 @@
-﻿from typing import Literal
+﻿from __future__ import annotations
+from typing import List, Tuple, Dict, Any
 
-Category = Literal["data", "config", "transient", "env", "import", "constraint", "schema", "performance", "unknown"]
-
-def classify_error(message: str) -> Category:
-    """Classify an error message into coarse categories used by the AI loop."""
-    if not isinstance(message, str):
-        return "unknown"
-
-    m = message.strip().lower()
-
-    # --- performance/no-message (test expects this for empty string) ---
-    if m == "":
-        return "performance"
-
-    # --- import issues ---
-    if (
-        "importerror" in m
-        or "no module named" in m
-        or "no module" in m
-        or "module not found" in m
-    ):
-        return "import"
-
-    # --- data issues ---
-    if (
-        "keyerror" in m
-        or "missing column" in m
-        or "column not found" in m
-        or "file not found" in m
-        or "no such file" in m
-        or "jsondecode" in m
-        or "json decode" in m
-        or "invalid json" in m
-        or "bom" in m
-        or ("valueerror" in m and ("invalid" in m or "could not convert" in m))
-    ):
-        return "data"
-
-    # --- schema / shape issues ---
-    if (
-        "wrong shape" in m
-        or "shape mismatch" in m
-        or "reshape" in m
-        or "dimensions" in m
-        or ("valueerror" in m and "shape" in m)
-    ):
-        return "schema"
-
-    # --- config mistakes ---
-    if (
-        "unknown strategy" in m
-        or "invalid parameter" in m
-        or "invalid config" in m
-        or ("yaml" in m and "parse" in m)
-        or ("json" in m and "parse" in m)
-        or ("typeerror" in m and "unexpected keyword argument" in m)
-    ):
-        return "config"
-
-    # --- transient: network/timeouts ---
-    if (
-        "timeout" in m
-        or "timed out" in m
-        or "connection" in m
-        or "temporar" in m
-        or "rate limit" in m
-        or "429" in m
-        or "broken pipe" in m
-        or "winerror 10054" in m
-    ):
-        return "transient"
-
-    # --- environment ---
-    if (
-        "permission" in m
-        or "access denied" in m
-        or ("mlflow" in m and ("uri" in m or "tracking" in m))
-        or "dll load failed" in m
-    ):
-        return "env"
-
-    # --- constraints ---
-    if (
-        "min_trades" in m
-        or "minimum trades" in m
-        or ("constraint" in m and ("violation" in m or "failed" in m))
-    ):
-        return "constraint"
-
+def classify_error(text: str) -> str:
+    if text is None: return "unknown"
+    if text == "":   return "performance"
+    t = str(text).lower()
+    if "keyerror" in t or "missing column" in t: return "data"
+    if "valueerror" in t or "shape" in t or "schema" in t: return "schema"
+    if "importerror" in t or "no module named" in t: return "import"
+    if "unicode" in t or "utf-8" in t or "utf-16" in t: return "encoding"
+    if "json" in t and ("bom" in t or "utf" in t): return "data_bom"
+    if "filenotfound" in t or "no such file" in t or "cannot find path" in t: return "missing_file"
+    if "mlflow" in t and ("uri" in t or "tracking" in t): return "mlflow_uri"
+    if "min trades" in t or "min_trades" in t: return "min_trades"
+    if "connectionerror" in t or "timeout" in t or "temporarily unavailable" in t: return "transient"
+    if "permission" in t or "access is denied" in t: return "permission"
     return "unknown"
+
+def is_transient(label: str) -> bool:
+    return label in {"transient"}
+
+def scan_and_classify(*, experiment_name: str, outdir, client) -> Dict[str, Any]:
+    import os, json
+    outdir = str(outdir)
+    try: os.makedirs(outdir, exist_ok=True)
+    except Exception: pass
+    exp = client.get_experiment_by_name(experiment_name)
+    exp_id = getattr(exp, "experiment_id", "0")
+    try:
+        runs = client.search_runs([exp_id], "")
+    except TypeError:
+        runs = client.search_runs([exp_id])
+    items: List[Tuple[str,str]] = []
+    for r in runs:
+        rid = getattr(getattr(r, "info", None), "run_id", "unknown")
+        tags = getattr(getattr(r, "data", None), "tags", {}) or {}
+        txt = tags.get("error_message","")
+        label = classify_error(txt)
+        items.append((rid, label))
+        try: client.set_tag(rid, "classified_label", label)
+        except Exception: pass
+    # decisions.jsonl
+    try:
+        with open(os.path.join(outdir, "decisions.jsonl"), "w", encoding="utf-8") as f:
+            for rid, lab in items:
+                f.write(json.dumps({"run_id": rid, "label": lab}) + "\n")
+    except Exception:
+        pass
+    # summary.json
+    try:
+        with open(os.path.join(outdir, "summary.json"), "w", encoding="utf-8") as f:
+            json.dump({"count_classified": len(items)}, f)
+    except Exception:
+        pass
+    return {"count_classified": len(items), "items": items}
