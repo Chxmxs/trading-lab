@@ -37,6 +37,8 @@ jobs:
 
       - name: "Run tests (verbose) and collect reports"
         shell: bash
+        env:
+          OPENAI_API_KEY: "ci-placeholder"
         run: |
           pytest -v --maxfail=1 --disable-warnings -q || exit 1
 
