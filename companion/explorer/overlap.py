@@ -168,3 +168,18 @@ def prune_overlap_strategies(df: pd.DataFrame, *,
     if kept_rows:
         return pd.DataFrame(kept_rows).reset_index(drop=True)
     return df.iloc[0:0].copy()
+
+def interval_overlap_score(a_start, a_end, b_start, b_end) -> float:
+    import pandas as pd
+    a0 = pd.to_datetime(a_start, utc=True); a1 = pd.to_datetime(a_end, utc=True)
+    b0 = pd.to_datetime(b_start, utc=True); b1 = pd.to_datetime(b_end, utc=True)
+    if a1 < a0: a0, a1 = a1, a0
+    if b1 < b0: b0, b1 = b1, b0
+    inter_start = max(a0, b0); inter_end = min(a1, b1)
+    inter = (inter_end - inter_start).total_seconds()
+    if inter <= 0:
+        return 0.0
+    dur_a = (a1 - a0).total_seconds()
+    dur_b = (b1 - b0).total_seconds()
+    union = dur_a + dur_b - inter
+    return float(inter / union) if union > 0 else 0.0
