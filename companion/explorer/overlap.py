@@ -4,7 +4,7 @@ from typing import Union, Iterable, Any
 import os
 import pandas as pd
 
-__all__ = ['load_trade_structure','interval_overlap_score','jaccard_points','prune_overlap_strategies','load_master']
+__all__ = [\1,'prune_master_items']
 
 _CANON = ['run_id','strategy','symbol','timeframe','side','qty','entry_time','entry_price','exit_time','exit_price','pnl','trade_id','position_id']
 
@@ -142,3 +142,21 @@ def prune_overlap_strategies(df: pd.DataFrame, *,
         return pd.DataFrame(kept_rows).reset_index(drop=True) if kept_rows else df.iloc[0:0].copy()
     # Otherwise, assume per-trade rows; no-op
     return df
+
+def prune_master_items(source, *,
+                       threshold: float = 0.75,
+                       score_column: str = "pnl",
+                       overlap_threshold: float = None,
+                       score_col: str = None):
+    """
+    Convenience wrapper used by tests:
+      - Loads a master table of trades from `source` (CSV dir/file or DataFrame)
+      - Applies prune_overlap_strategies with alias args supported
+      - Returns the pruned DataFrame
+    """
+    if overlap_threshold is not None:
+        threshold = float(overlap_threshold)
+    if score_col is not None:
+        score_column = str(score_col)
+    df = load_master(source)
+    return prune_overlap_strategies(df, threshold=threshold, score_column=score_column)
