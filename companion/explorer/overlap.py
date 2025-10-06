@@ -4,7 +4,7 @@ from typing import Union, Iterable, Any
 import os
 import pandas as pd
 
-__all__ = ['load_trade_structure','interval_overlap_score','jaccard_points','prune_overlap_strategies','load_master','prune_master_items']
+__all__ = [\1,'save_master']
 
 _CANON = ['run_id','strategy','symbol','timeframe','side','qty','entry_time','entry_price','exit_time','exit_price','pnl','trade_id','position_id']
 
@@ -160,3 +160,43 @@ def prune_master_items(source, *,
         score_column = str(score_col)
     df = load_master(source)
     return prune_overlap_strategies(df, threshold=threshold, score_column=score_column)
+
+def save_master(obj, dest):
+    """
+    Save a master object (dict, list, or DataFrame) to disk.
+    - If list/dict -> write JSON
+    - If DataFrame -> write CSV
+    Returns pathlib.Path of written file.
+    """
+    from pathlib import Path
+    import pandas as pd, json
+
+    p = Path(dest)
+    if p.suffix:
+        p.parent.mkdir(parents=True, exist_ok=True)
+    else:
+        p.mkdir(parents=True, exist_ok=True)
+
+    # JSON case
+    if isinstance(obj, (list, dict)):
+        out = p if p.suffix.lower() == ".json" else (p / "master.json" if p.is_dir() else p.with_suffix(".json"))
+        with open(out, "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, indent=2)
+        return out
+
+    # DataFrame case
+    if isinstance(obj, pd.DataFrame):
+        out = p if p.suffix.lower() == ".csv" else (p / "master.csv" if p.is_dir() else p.with_suffix(".csv"))
+        df = obj.copy()
+        cols = list(df.columns)
+        if "timestamp" in cols:
+            cols = ["timestamp"] + [c for c in cols if c != "timestamp"]
+            df = df[cols]
+        df.to_csv(out, index=False)
+        return out
+
+    # Fallback generic JSON
+    out = p if p.suffix.lower() == ".json" else (p / "master.json" if p.is_dir() else p.with_suffix(".json"))
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(str(obj), f, ensure_ascii=False, indent=2)
+    return out
