@@ -4,7 +4,7 @@ from typing import Union, Iterable, Dict, Any
 import os
 import pandas as pd
 
-__all__ = ["load_trade_structure", "jaccard_points", "prune_overlap_strategies"]
+__all__ = [\1,"load_master"]
 
 _CANON = ["run_id","strategy","symbol","timeframe","side","qty",
           "entry_time","entry_price","exit_time","exit_price",
@@ -183,3 +183,34 @@ def interval_overlap_score(a_start, a_end, b_start, b_end) -> float:
     dur_b = (b1 - b0).total_seconds()
     union = dur_a + dur_b - inter
     return float(inter / union) if union > 0 else 0.0
+
+def load_master(source) -> pd.DataFrame:
+    """
+    Load a 'master' collection of trades.
+    - CSV file  → normalize that one file
+    - Directory → load all *.csv inside and concatenate
+    - DataFrame → normalize directly
+    Returns canonical DataFrame.
+    """
+    from pathlib import Path
+    p = Path(source)
+    if isinstance(source, pd.DataFrame):
+        return load_trade_structure(source)
+    if not p.exists():
+        raise FileNotFoundError(f"Path not found: {p}")
+    frames = []
+    if p.is_file():
+        df = load_trade_structure(p)
+        if "strategy" in df.columns and (df["strategy"] == "").all():
+            df["strategy"] = p.stem
+        frames.append(df)
+    else:
+        for csv in sorted(p.glob("*.csv")):
+            df = load_trade_structure(csv)
+            if "strategy" in df.columns and (df["strategy"] == "").all():
+                df["strategy"] = csv.stem
+            frames.append(df)
+    if not frames:
+        return pd.DataFrame(columns=_CANON)
+    out = pd.concat(frames, axis=0, ignore_index=True)
+    return _normalize(out)
