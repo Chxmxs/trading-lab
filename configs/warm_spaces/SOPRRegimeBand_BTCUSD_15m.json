@@ -1,0 +1,115 @@
+{
+  "strategy": "SOPRRegimeBand",
+  "symbol": "BTCUSD",
+  "timeframe": "15m",
+  "generated_at": "2025-10-07T150934",
+  "policy": {
+    "objective_col": "objective",
+    "top_frac": 0.25,
+    "min_trials": 60,
+    "half_life_days": 90.0,
+    "min_width_ratio": 0.15,
+    "expand_margin": 0.05,
+    "kfolds": 5,
+    "model_type": "auto",
+    "tag_stage": "13"
+  },
+  "model": {
+    "cv_r2_mean": -2.6800448674113606,
+    "cv_r2_std": 1.0159713855560595,
+    "model_type": "gbr",
+    "rows": 21.0,
+    "features": 11.0,
+    "splits": 5.0
+  },
+  "warm_space": {
+    "param_band_high": {
+      "suggest": "float",
+      "low": 1.0011000214990358,
+      "high": 1.02971174930932,
+      "median": 1.0125463004990496,
+      "global_min": 1.0011000214990358,
+      "global_max": 1.0337971211576096
+    },
+    "param_band_low": {
+      "suggest": "float",
+      "low": 0.9675915628106931,
+      "high": 0.998833362326558,
+      "median": 0.9699323478741166,
+      "global_min": 0.9675915628106931,
+      "global_max": 0.9989468448256698
+    },
+    "param_band_pad": {
+      "suggest": "float",
+      "low": 0.0003727532183988541,
+      "high": 0.003405798673095926,
+      "median": 0.0005979712296915085,
+      "global_min": 0.0003727532183988541,
+      "global_max": 0.0048476855539393284
+    },
+    "param_max_hold_days": {
+      "suggest": "int",
+      "low": 30.0,
+      "high": 157.0,
+      "median": 110.0,
+      "global_min": 30.0,
+      "global_max": 170.0
+    },
+    "param_ma_regime": {
+      "suggest": "int",
+      "low": 77.0,
+      "high": 110.0,
+      "median": 100.0,
+      "global_min": 60.0,
+      "global_max": 110.0
+    },
+    "param_ma_short": {
+      "suggest": "int",
+      "low": 5.0,
+      "high": 10.0,
+      "median": 9.0,
+      "global_min": 5.0,
+      "global_max": 10.0
+    },
+    "param_regime_eps": {
+      "suggest": "float",
+      "low": 0.0018089945827436656,
+      "high": 0.0077750488555532,
+      "median": 0.004275410183585496,
+      "global_min": 0.00034388521115218395,
+      "global_max": 0.009923626654603366
+    },
+    "param_sl_pct": {
+      "suggest": "float",
+      "low": 0.04016566351370807,
+      "high": 0.06457510916459826,
+      "median": 0.04747876687446625,
+      "global_min": 0.04016566351370807,
+      "global_max": 0.06908753883293677
+    },
+    "param_sopr_tp_bear": {
+      "suggest": "float",
+      "low": 0.9369834088361572,
+      "high": 0.9678606587980306,
+      "median": 0.9513639697629197,
+      "global_min": 0.9258181267848968,
+      "global_max": 0.9763699364938513
+    },
+    "param_sopr_tp_bull": {
+      "suggest": "float",
+      "low": 1.0432248923679381,
+      "high": 1.0737610991754414,
+      "median": 1.0546897798182195,
+      "global_min": 1.0323225206359998,
+      "global_max": 1.0788069949928998
+    },
+    "param_tp_pct": {
+      "suggest": "float",
+      "low": 0.05465820853507781,
+      "high": 0.07722699421778279,
+      "median": 0.06166031869068446,
+      "global_min": 0.0511617559988355,
+      "global_max": 0.07722699421778279
+    }
+  }
+}

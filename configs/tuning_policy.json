@@ -1,0 +1,11 @@
+﻿{
+  "objective_col": "objective",
+  "top_frac": 0.25,
+  "min_trials": 60,
+  "half_life_days": 90.0,
+  "min_width_ratio": 0.15,
+  "expand_margin": 0.05,
+  "kfolds": 5,
+  "model_type": "auto",
+  "tag_stage": "13"
+}
